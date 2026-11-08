@@ -13,7 +13,7 @@
       --primary-hover: #6d28d9;
       --accent-yellow: #f59e0b;
       --accent-green: #10b981;
-      --accent-rose: #f43f5e;
+      --accent-rose: #e11d48;
       --text-main: #0f172a;
       --text-muted: #64748b;
       --border-color: #e2e8f0;
@@ -51,7 +51,14 @@
       letter-spacing: -0.5px;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+    }
+
+    /* Иллюстрация граната (SVG) */
+    .pomegranate-icon {
+      width: 24px;
+      height: 24px;
+      fill: #be123c;
     }
 
     .stats {
@@ -132,4 +139,373 @@
       width: 100%;
       padding: 14px 16px;
       font-size: 18px;
-      border: 2
+      border: 2px solid var(--border-color);
+      border-radius: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      text-align: center;
+    }
+    input[type="text"]:focus {
+      border-color: var(--primary);
+    }
+
+    .options-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .opt-btn {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      background: #f8fafc;
+      border: 2px solid var(--border-color);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text-main);
+      text-align: center;
+    }
+    .opt-btn:hover {
+      background: #f1f5f9;
+      border-color: var(--primary);
+    }
+    .opt-btn.correct {
+      background: #d1fae5 !important;
+      border-color: var(--accent-green) !important;
+      color: #065f46;
+    }
+    .opt-btn.wrong {
+      background: #fee2e2 !important;
+      border-color: var(--accent-rose) !important;
+      color: #991b1b;
+    }
+
+    .action-btn {
+      width: 100%;
+      margin-top: 16px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .action-btn:hover { background: var(--primary-hover); }
+
+    .next-btn {
+      width: 100%;
+      margin-top: 16px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      background: var(--accent-yellow);
+      color: #78350f;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      display: none;
+    }
+
+    .footer-controls {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .btn-know {
+      flex: 1;
+      padding: 14px;
+      background: #d1fae5;
+      color: #065f46;
+      border: none;
+      border-radius: 14px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .btn-audio {
+      padding: 14px 20px;
+      background: #fef3c7;
+      color: #92400e;
+      border: none;
+      border-radius: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .feedback-msg {
+      margin-top: 15px;
+      font-weight: 700;
+      font-size: 16px;
+      text-align: center;
+      min-height: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">
+      <!-- Векторная иконка граната -->
+      <svg class="pomegranate-icon" viewBox="0 0 24 24">
+        <path d="M12 2C10.5 2 9.8 3 9.5 3.8C8 3.5 6.5 4.2 5.8 5.5C5 7 5.2 9 4.5 10.5C3.5 12 3 14 4 16C5 18 7 21 10 22C11 22.3 13 22.3 14 22C17 21 19 18 20 16C21 14 20.5 12 19.5 10.5C18.8 9 19 7 18.2 5.5C17.5 4.2 16 3.5 14.5 3.8C14.2 3 13.5 2 12 2M11 4H13V6H11V4Z"/>
+      </svg>
+      Հայերեն
+    </div>
+    <div class="stats" id="stats-counter">Սովորված: 0</div>
+  </header>
+
+  <div class="app-container">
+    <div class="card" id="card-box">
+      <div class="img-box" id="img-box">
+        <img id="card-img" src="" alt="Иллюстрация">
+      </div>
+      
+      <div class="mode-badge" id="mode-badge">Բեռնվում է...</div>
+      <div class="prompt-text" id="prompt-text">Համեցեք...</div>
+
+      <div id="exercise-area" style="width: 100%;"></div>
+      <button class="next-btn" id="next-btn" onclick="nextQuestion()">Հաջորդը ➔</button>
+
+      <div class="feedback-msg" id="feedback-msg"></div>
+    </div>
+
+    <div class="footer-controls">
+      <button class="btn-audio" onclick="playAudio()" title="Լսել">🔊 Լսել</button>
+      <button class="btn-know" onclick="markAsKnown()">Գիտեմ</button>
+    </div>
+  </div>
+
+  <script>
+    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSzY_RxdjH_dkidV-IP2EjpHwa-jm5uCSoampbOqYF4QOz2IKvfUSTVOVfUIyp89qTIuPOmdHZ_iBwS/pub?output=csv';
+    const SAVE_API_URL = 'https://script.google.com/macros/s/AKfycbyKYPb6zu0bO6NAtsm2vJoNn_YKk63MS8xeUjdCKIfflXvtPrCB0u62UVVTV82EKE6F/exec';
+
+    const PROXIES = [
+      'https://corsproxy.io/?' + encodeURIComponent(CSV_URL),
+      'https://api.allorigins.win/raw?url=' + encodeURIComponent(CSV_URL),
+      CSV_URL
+    ];
+
+    let words = [];
+    let currentWord = null;
+    let currentMode = 0;
+    let waitingForNext = false;
+
+    async function fetchCSV() {
+      for (let url of PROXIES) {
+        try {
+          const res = await fetch(url);
+          if (res.ok) {
+            const text = await res.text();
+            if (text && text.length > 20) return text;
+          }
+        } catch (e) {
+          console.warn('Ошибка загрузки с прокси:', url);
+        }
+      }
+      throw new Error('Все варианты загрузки недоступны');
+    }
+
+    async function init() {
+      try {
+        const csvText = await fetchCSV();
+
+        Papa.parse(csvText, {
+          header: false,
+          skipEmptyLines: true,
+          complete: function(results) {
+            const rows = results.data;
+            for (let i = 1; i < rows.length; i++) {
+              const r = rows[i];
+              if (r.length >= 2) {
+                const arm = r[0] ? r[0].trim() : '';
+                const ru = r[1] ? r[1].trim() : '';
+                const vitchak = r[2] ? parseInt(r[2]) || 0 : 0;
+
+                if (arm && arm !== 'բառ' && !arm.startsWith('#')) {
+                  words.push({ armenian: arm, russian: ru, level: vitchak });
+                }
+              }
+            }
+
+            if (words.length > 0) {
+              nextQuestion();
+            } else {
+              document.getElementById('prompt-text').innerText = 'Տվյալներ չկան';
+            }
+          }
+        });
+      } catch (e) {
+        document.getElementById('prompt-text').innerText = 'Բեռնման սխալ';
+      }
+    }
+
+    async function saveProgressToSheet(armenianWord, level) {
+      if (!SAVE_API_URL) return;
+      try {
+        const url = `${SAVE_API_URL}?word=${encodeURIComponent(armenianWord)}&level=${level}`;
+        await fetch(url, { mode: 'no-cors' });
+      } catch (err) {
+        console.error('Ошибка сохранения уровня:', err);
+      }
+    }
+
+    function nextQuestion() {
+      waitingForNext = false;
+      document.getElementById('feedback-msg').innerText = '';
+      document.getElementById('img-box').style.display = 'none';
+      document.getElementById('next-btn').style.display = 'none';
+      document.getElementById('card-box').style.borderColor = 'var(--border-color)';
+
+      const activeWords = words.filter(w => w.level < 7);
+      if (activeWords.length === 0) {
+        document.getElementById('prompt-text').innerText = '🎉 Բոլոր բառերը սովորված են!';
+        document.getElementById('exercise-area').innerHTML = '';
+        return;
+      }
+
+      currentWord = activeWords[Math.floor(Math.random() * activeWords.length)];
+      currentMode = Math.floor(Math.random() * 4);
+
+      const badge = document.getElementById('mode-badge');
+      const prompt = document.getElementById('prompt-text');
+      const area = document.getElementById('exercise-area');
+      area.innerHTML = '';
+
+      if (currentMode === 0) {
+        badge.innerText = 'Գրել հայերեն (Ռուսերենից)';
+        prompt.innerText = currentWord.russian;
+        area.innerHTML = `
+          <div class="input-box">
+            <input type="text" id="user-input" placeholder="Գրեք հայերեն..." autocomplete="off">
+            <button class="action-btn" onclick="checkInput()">Ստուգել</button>
+          </div>
+        `;
+        document.getElementById('user-input').focus();
+        document.getElementById('user-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') checkInput(); });
+
+      } else if (currentMode === 1) {
+        badge.innerText = 'Թարգմանություն (Հայերենից Ռուսերեն)';
+        prompt.innerText = currentWord.armenian;
+        renderOptions('russian', getDistractors('russian', currentWord.russian));
+
+      } else if (currentMode === 2) {
+        badge.innerText = 'Ընտրել բառը (Ռուսերենից)';
+        prompt.innerText = currentWord.russian;
+        renderOptions('armenian', getDistractors('armenian', currentWord.armenian));
+
+      } else if (currentMode === 3) {
+        badge.innerText = 'Լսել և գուշակել (Աուդիո)';
+        prompt.innerText = '🔊 Լսեք ձայնը...';
+        playAudio();
+        renderOptions('russian', getDistractors('russian', currentWord.russian));
+      }
+
+      updateStats();
+    }
+
+    function getDistractors(field, correctValue) {
+      let pool = words.map(w => w[field]).filter(v => v !== correctValue);
+      pool.sort(() => Math.random() - 0.5);
+      let options = pool.slice(0, 3);
+      options.push(correctValue);
+      options.sort(() => Math.random() - 0.5);
+      return options;
+    }
+
+    function renderOptions(field, options) {
+      const area = document.getElementById('exercise-area');
+      let html = '<div class="options-grid">';
+      options.forEach(opt => {
+        html += `<button class="opt-btn" onclick="checkOption(this, '${opt.replace(/'/g, "\\'")}', '${currentWord[field].replace(/'/g, "\\'")}')">${opt}</button>`;
+      });
+      html += '</div>';
+      area.innerHTML = html;
+    }
+
+    function checkInput() {
+      if (waitingForNext) return;
+      const val = document.getElementById('user-input').value.trim();
+      const isCorrect = val.toLowerCase() === currentWord.armenian.toLowerCase();
+      handleAnswer(isCorrect);
+    }
+
+    function checkOption(btn, selected, correct) {
+      if (waitingForNext) return;
+      const isCorrect = selected === correct;
+      const buttons = document.querySelectorAll('.opt-btn');
+      buttons.forEach(b => {
+        if (b.innerText === correct) b.classList.add('correct');
+        if (b === btn && !isCorrect) b.classList.add('wrong');
+        b.onclick = null;
+      });
+      handleAnswer(isCorrect);
+    }
+
+    function handleAnswer(isCorrect) {
+      waitingForNext = true;
+      const msg = document.getElementById('feedback-msg');
+      const cardBox = document.getElementById('card-box');
+      
+      showImage(currentWord.russian);
+      document.getElementById('prompt-text').innerText = `${currentWord.armenian} — ${currentWord.russian}`;
+
+      if (isCorrect) {
+        cardBox.style.borderColor = 'var(--accent-green)';
+        msg.style.color = 'var(--accent-green)';
+        msg.innerText = '✨ Ճիշտ է!';
+        currentWord.level = Math.min(7, currentWord.level + 1);
+        saveProgressToSheet(currentWord.armenian, currentWord.level);
+        setTimeout(nextQuestion, 1000);
+      } else {
+        cardBox.style.borderColor = 'var(--accent-rose)';
+        msg.style.color = 'var(--accent-rose)';
+        msg.innerText = `❌ Սխալ է: ${currentWord.armenian}`;
+        currentWord.level = Math.max(0, currentWord.level - 1);
+        saveProgressToSheet(currentWord.armenian, currentWord.level);
+        document.getElementById('exercise-area').innerHTML = '';
+        document.getElementById('next-btn').style.display = 'block';
+      }
+    }
+
+    function showImage(keyword) {
+      const clean = keyword.split(/[,;(]/)[0].trim();
+      const imgBox = document.getElementById('img-box');
+      const img = document.getElementById('card-img');
+      img.src = `https://loremflickr.com/400/250/${encodeURIComponent(clean)}`;
+      imgBox.style.display = 'block';
+    }
+
+    function playAudio() {
+      if (!currentWord) return;
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(currentWord.armenian);
+      utterance.lang = 'hy-AM';
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function markAsKnown() {
+      if (!currentWord) return;
+      currentWord.level = 7;
+      saveProgressToSheet(currentWord.armenian, 7);
+      alert(`Բառը ("${currentWord.armenian}") նշվեց որպես սովորված։`);
+      nextQuestion();
+    }
+
+    function updateStats() {
+      const learned = words.filter(w => w.level >= 7).length;
+      document.getElementById('stats-counter').innerText = `Սովորված: ${learned} / ${words.length}`;
+    }
+
+    init();
+  </script>
+</body>
+</html>
