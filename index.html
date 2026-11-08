@@ -15,7 +15,6 @@
       --accent-yellow-border: #fde68a;
       --accent-green: #059669;
       --accent-rose: #f43f5e;
-      --accent-rose-bg: #ffe4e6;
       --text-main: #0f172a;
       --text-muted: #64748b;
       --border-color: #ddd6fe;
@@ -56,7 +55,6 @@
       gap: 10px;
     }
 
-    /* Векторный армянский гранат SVG */
     .pomegranate-svg {
       width: 32px;
       height: 32px;
@@ -151,7 +149,6 @@
       color: var(--text-main);
     }
 
-    /* Раскладка клавиатуры */
     .armenian-keyboard {
       display: none;
       width: 100%;
@@ -239,7 +236,6 @@
       box-shadow: 0 4px 12px rgba(109, 40, 217, 0.25);
     }
 
-    /* Красивая розовая кнопка Дальше на месте Знаю */
     .next-btn {
       width: 100%;
       margin-top: 12px;
@@ -265,7 +261,6 @@
       justify-content: flex-start;
     }
     
-    /* Нежно-светло-желтая кнопка Знаю на месте Слушать */
     .btn-know {
       padding: 12px 18px;
       background: var(--accent-yellow);
@@ -285,103 +280,5 @@
       min-height: 36px;
       line-height: 1.3;
     }
-    .feedback-msg .error-title {
-      color: var(--accent-rose);
-      font-size: 15px;
-      margin-bottom: 4px;
-    }
     .feedback-msg .arm-word {
-      font-size: 18px;
-      font-weight: 900;
-      color: var(--text-main);
-    }
-    .feedback-msg .ru-word {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-  </style>
-</head>
-<body>
-
-  <header>
-    <div class="logo">
-      <!-- Векторный армянский гранат SVG -->
-      <svg class="pomegranate-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M28 8L32 2L36 8L42 4L40 12C50 16 56 26 56 38C56 51.2548 45.2548 62 32 62C18.7452 62 8 51.2548 8 38C8 26 14 16 24 12L22 4L28 8Z" fill="#BE123C"/>
-        <path d="M32 18C41.9411 18 50 26.0589 50 36C50 45.9411 41.9411 54 32 54C22.0589 54 14 45.9411 14 36C14 26.0589 22.0589 18 32 18Z" fill="#E11D48"/>
-        <circle cx="26" cy="30" r="3" fill="#881337"/>
-        <circle cx="34" cy="28" r="3.5" fill="#881337"/>
-        <circle cx="38" cy="36" r="3" fill="#881337"/>
-        <circle cx="28" cy="40" r="3.5" fill="#881337"/>
-        <circle cx="34" cy="44" r="3" fill="#881337"/>
-        <path d="M40 10C46 6 52 8 54 10C52 14 46 14 40 10Z" fill="#15803D"/>
-      </svg>
-      Հայերեն
-    </div>
-    <div class="stats" id="stats-counter">Սովորված: 0</div>
-  </header>
-
-  <div class="app-container">
-    <div class="card" id="card-box">
-      <div class="img-box" id="img-box">
-        <img id="card-img" src="" alt="Պատկեր">
-      </div>
-      
-      <div class="mode-badge" id="mode-badge">Բեռնվում է...</div>
-      <div class="prompt-text" id="prompt-text">Սպասեք...</div>
-
-      <div id="exercise-area" style="width: 100%;"></div>
-      
-      <!-- Экранная клавиатура -->
-      <div class="armenian-keyboard" id="arm-keyboard">
-        <div class="kb-row">
-          <button class="kb-key" onclick="typeChar('ձ')">ձ</button>
-          <button class="kb-key" onclick="typeChar('յ')">յ</button>
-          <button class="kb-key" onclick="typeChar('և')">և</button>
-          <button class="kb-key" onclick="typeChar('օ')">օ</button>
-          <button class="kb-key" onclick="typeChar('ռ')">ռ</button>
-          <button class="kb-key" onclick="typeChar('ժ')">ժ</button>
-          <button class="kb-key" onclick="typeChar('։')">։</button>
-          <button class="kb-key" onclick="typeChar(',')">,</button>
-          <button class="kb-key" onclick="typeChar('՛')">՛</button>
-          <button class="kb-key" onclick="typeChar('՞')">՞</button>
-        </div>
-        <div class="kb-row">
-          <button class="kb-key" onclick="typeChar('խ')">խ</button>
-          <button class="kb-key" onclick="typeChar('վ')">վ</button>
-          <button class="kb-key" onclick="typeChar('է')">է</button>
-          <button class="kb-key" onclick="typeChar('ռ')">ռ</button>
-          <button class="kb-key" onclick="typeChar('դ')">դ</button>
-          <button class="kb-key" onclick="typeChar('ե')">ե</button>
-          <button class="kb-key" onclick="typeChar('ը')">ը</button>
-          <button class="kb-key" onclick="typeChar('ի')">ի</button>
-          <button class="kb-key" onclick="typeChar('օ')">օ</button>
-          <button class="kb-key" onclick="typeChar('բ')">բ</button>
-          <button class="kb-key" onclick="typeChar('չ')">չ</button>
-          <button class="kb-key" onclick="typeChar('ջ')">ջ</button>
-        </div>
-        <div class="kb-row">
-          <button class="kb-key" onclick="typeChar('ա')">ա</button>
-          <button class="kb-key" onclick="typeChar('ս')">ս</button>
-          <button class="kb-key" onclick="typeChar('տ')">տ</button>
-          <button class="kb-key" onclick="typeChar('ֆ')">ֆ</button>
-          <button class="kb-key" onclick="typeChar('կ')">կ</button>
-          <button class="kb-key" onclick="typeChar('հ')">հ</button>
-          <button class="kb-key" onclick="typeChar('ճ')">ճ</button>
-          <button class="kb-key" onclick="typeChar('ք')">ք</button>
-          <button class="kb-key" onclick="typeChar('լ')">լ</button>
-          <button class="kb-key" onclick="typeChar('թ')">թ</button>
-          <button class="kb-key" onclick="typeChar('փ')">փ</button>
-        </div>
-        <div class="kb-row">
-          <button class="kb-key" onclick="typeChar('զ')">զ</button>
-          <button class="kb-key" onclick="typeChar('ց')">ց</button>
-          <button class="kb-key" onclick="typeChar('գ')">գ</button>
-          <button class="kb-key" onclick="typeChar('ւ')">ւ</button>
-          <button class="kb-key" onclick="typeChar('պ')">պ</button>
-          <button class="kb-key" onclick="typeChar('ն')">ն</button>
-          <button class="kb-key" onclick="typeChar('մ')">մ</button>
-          <button class="kb-key" onclick="typeChar('շ')">շ</button>
-          <button class
+      font-size: 1
