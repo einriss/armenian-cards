@@ -40,6 +40,8 @@
       justify-content: space-between;
       align-items: center;
       padding: 10px 0;
+      border-bottom: 2px solid var(--border-color);
+      margin-bottom: 15px;
     }
 
     .logo {
@@ -47,6 +49,9 @@
       font-size: 20px;
       color: var(--primary);
       letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .stats {
@@ -84,11 +89,11 @@
 
     .img-box {
       width: 100%;
-      height: 180px;
+      height: 160px;
       border-radius: 16px;
       overflow: hidden;
       background: #f1f5f9;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       display: none;
     }
     .img-box img {
@@ -186,6 +191,20 @@
     }
     .action-btn:hover { background: var(--primary-hover); }
 
+    .next-btn {
+      width: 100%;
+      margin-top: 16px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      background: var(--accent-yellow);
+      color: #78350f;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      display: none;
+    }
+
     .footer-controls {
       width: 100%;
       max-width: 400px;
@@ -226,12 +245,12 @@
 <body>
 
   <header>
-    <div class="logo">Հայերեն Բառեր</div>
+    <div class="logo">🍎 Հայերեն</div>
     <div class="stats" id="stats-counter">Սովորված: 0</div>
   </header>
 
   <div class="app-container">
-    <div class="card">
+    <div class="card" id="card-box">
       <div class="img-box" id="img-box">
         <img id="card-img" src="" alt="Иллюстрация">
       </div>
@@ -240,13 +259,14 @@
       <div class="prompt-text" id="prompt-text">Համեցեք...</div>
 
       <div id="exercise-area" style="width: 100%;"></div>
+      <button class="next-btn" id="next-btn" onclick="nextQuestion()">Հաջորդը (Дальше) ➔</button>
 
       <div class="feedback-msg" id="feedback-msg"></div>
     </div>
 
     <div class="footer-controls">
       <button class="btn-audio" onclick="playAudio()" title="Լսել">🔊 Լսել</button>
-      <button class="btn-know" onclick="markAsKnown()">Անգիր գիտեմ (Գիտեմ)</button>
+      <button class="btn-know" onclick="markAsKnown()">Գիտեմ</button>
     </div>
   </div>
 
@@ -263,6 +283,7 @@
     let words = [];
     let currentWord = null;
     let currentMode = 0;
+    let waitingForNext = false;
 
     async function fetchCSV() {
       for (let url of PROXIES) {
@@ -324,8 +345,11 @@
     }
 
     function nextQuestion() {
+      waitingForNext = false;
       document.getElementById('feedback-msg').innerText = '';
       document.getElementById('img-box').style.display = 'none';
+      document.getElementById('next-btn').style.display = 'none';
+      document.getElementById('card-box').style.borderColor = 'var(--border-color)';
 
       const activeWords = words.filter(w => w.level < 7);
       if (activeWords.length === 0) {
@@ -394,12 +418,14 @@
     }
 
     function checkInput() {
+      if (waitingForNext) return;
       const val = document.getElementById('user-input').value.trim();
       const isCorrect = val.toLowerCase() === currentWord.armenian.toLowerCase();
       handleAnswer(isCorrect);
     }
 
     function checkOption(btn, selected, correct) {
+      if (waitingForNext) return;
       const isCorrect = selected === correct;
       const buttons = document.querySelectorAll('.opt-btn');
       buttons.forEach(b => {
@@ -411,20 +437,31 @@
     }
 
     function handleAnswer(isCorrect) {
+      waitingForNext = true;
       const msg = document.getElementById('feedback-msg');
+      const cardBox = document.getElementById('card-box');
+      
+      // Показываем картинку и правильный ответ вместе
+      showImage(currentWord.russian);
+      document.getElementById('prompt-text`').innerText = `${currentWord.armenian} — ${currentWord.russian}`;
+
       if (isCorrect) {
+        cardBox.style.borderColor = 'var(--accent-green)';
         msg.style.color = 'var(--accent-green)';
         msg.innerText = '✨ Ճիշտ է!';
         currentWord.level = Math.min(7, currentWord.level + 1);
         saveProgressToSheet(currentWord.armenian, currentWord.level);
-        setTimeout(nextQuestion, 1200);
+        // Моментальный автоматический переход при правильном ответе
+        setTimeout(nextQuestion, 1000);
       } else {
+        cardBox.style.borderColor = 'var(--accent-rose)';
         msg.style.color = 'var(--accent-rose)';
         msg.innerText = `❌ Սխալ է: ${currentWord.armenian}`;
         currentWord.level = Math.max(0, currentWord.level - 1);
         saveProgressToSheet(currentWord.armenian, currentWord.level);
-        showImage(currentWord.russian);
-        setTimeout(nextQuestion, 3000);
+        // При ошибке убираем поле ввода/варианты и показываем кнопку «Дальше»
+        document.getElementById('exercise-area').innerHTML = '';
+        document.getElementById('next-btn').style.display = 'block';
       }
     }
 
@@ -438,6 +475,8 @@
 
     function playAudio() {
       if (!currentWord) return;
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(currentWord.armenian);
       utterance.lang = 'hy-AM';
       window.speechSynthesis.speak(utterance);
