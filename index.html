@@ -57,7 +57,7 @@
     .logo-img {
       width: 28px;
       height: 28px;
-      object-fit: contain;
+      object-fit: cover;
       border-radius: 50%;
     }
 
@@ -147,14 +147,14 @@
       color: var(--text-main);
     }
 
-    /* Восточно-армянская клавиатура Mac (խվէրդե...) */
+    /* Точная экранная клавиатура по вашему скриншоту */
     .armenian-keyboard {
       display: none;
       width: 100%;
       background: #e2e8f0;
       border-radius: 16px;
       padding: 8px;
-      gap: 6px;
+      gap: 5px;
       flex-direction: column;
       margin-top: 10px;
     }
@@ -167,8 +167,8 @@
       flex: 1;
       background: #ffffff;
       border: none;
-      border-radius: 8px;
-      padding: 10px 0;
+      border-radius: 6px;
+      padding: 9px 0;
       font-size: 15px;
       font-weight: 700;
       color: var(--text-main);
@@ -231,7 +231,6 @@
       cursor: pointer;
     }
 
-    /* Зеленая кнопка Дальше */
     .next-btn {
       width: 100%;
       margin-top: 10px;
@@ -255,7 +254,6 @@
       align-items: center;
     }
     
-    /* Маленькая нейтральная кнопка Знаю */
     .btn-know {
       padding: 10px 16px;
       background: #f1f5f9;
@@ -295,7 +293,7 @@
 
   <header>
     <div class="logo">
-      <img src="<Image src="image_generation_content/11191756052859384341" alt="Гранат" />" class="logo-img" alt="Гранат">
+      <img src="https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=100&auto=format&fit=crop&q=60" class="logo-img" alt="Նուռ">
       Հայերեն
     </div>
     <div class="stats" id="stats-counter">Սովորված: 0</div>
@@ -304,15 +302,15 @@
   <div class="app-container">
     <div class="card" id="card-box">
       <div class="img-box" id="img-box">
-        <img id="card-img" src="" alt="Иллюстрация">
+        <img id="card-img" src="" alt="Պատկեր">
       </div>
       
-      <div class="mode-badge" id="mode-badge">Загрузка</div>
-      <div class="prompt-text" id="prompt-text">Секунду</div>
+      <div class="mode-badge" id="mode-badge">Բեռնվում է</div>
+      <div class="prompt-text" id="prompt-text">Վայրկյան...</div>
 
       <div id="exercise-area" style="width: 100%;"></div>
       
-      <!-- Восточно-армянская клавиатура Mac (խվէրդե...) -->
+      <!-- Клавиатура по вашему скриншоту (точный порядок рядов) -->
       <div class="armenian-keyboard" id="arm-keyboard">
         <div class="kb-row">
           <button class="kb-key" onclick="typeChar('խ')">խ</button>
@@ -347,7 +345,7 @@
           <button class="kb-key" onclick="typeChar('ն')">ն</button>
           <button class="kb-key" onclick="typeChar('մ')">մ</button>
           <button class="kb-key" onclick="typeChar('շ')">շ</button>
-          <button class="kb-key" onclick="deleteChar()">⌫</button>
+          <button class="kb-key action" onclick="deleteChar()">⌫</button>
         </div>
         <div class="kb-row">
           <button class="kb-key" onclick="typeChar('ջ')">ջ</button>
@@ -360,20 +358,20 @@
           <button class="kb-key" onclick="typeChar('ե')">ե</button>
         </div>
         <div class="kb-row">
-          <button class="kb-key" style="flex: 4;" onclick="typeChar(' ')">пробел</button>
+          <button class="kb-key" style="flex: 4;" onclick="typeChar(' ')">բացատ</button>
           <button class="kb-key action" style="flex: 2; background: var(--text-main); color: #fff;" onclick="checkInput()">OK</button>
         </div>
       </div>
 
-      <button class="next-btn" id="next-btn" onclick="nextQuestion()">Дальше ➔</button>
+      <button class="next-btn" id="next-btn" onclick="nextQuestion()">Հաջորդը ➔</button>
 
       <div class="feedback-msg" id="feedback-msg"></div>
     </div>
 
     <div class="footer-controls">
-      <button class="btn-audio" onclick="playAudio()">🔊 Слушать</button>
+      <button class="btn-audio" onclick="playAudio()">🔊 Լսել</button>
       <div style="flex: 1;"></div>
-      <button class="btn-know" onclick="markAsKnown()">Знаю слово</button>
+      <button class="btn-know" onclick="markAsKnown()">Գիտեմ</button>
     </div>
   </div>
 
@@ -427,11 +425,11 @@
               }
             }
             if (words.length > 0) nextQuestion();
-            else document.getElementById('prompt-text').innerText = 'Нет данных';
+            else document.getElementById('prompt-text').innerText = 'Տվյալներ չկան';
           }
         });
       } catch (e) {
-        document.getElementById('prompt-text').innerText = 'Ошибка загрузки';
+        document.getElementById('prompt-text').innerText = 'Բեռնման սխալ';
       }
     }
 
@@ -455,7 +453,7 @@
 
       const activeWords = words.filter(w => w.level < 7);
       if (activeWords.length === 0) {
-        document.getElementById('prompt-text').innerText = 'Все слова выучены';
+        document.getElementById('prompt-text').innerText = '🎉 Բոլոր բառերը սովորված են!';
         document.getElementById('exercise-area').innerHTML = '';
         return;
       }
@@ -469,145 +467,7 @@
       area.innerHTML = '';
 
       if (currentMode === 0) {
-        badge.innerText = 'Написание по-армянски';
+        badge.innerText = 'Գրել հայերեն';
         prompt.innerText = currentWord.russian;
         area.innerHTML = `
-          <div class="input-box">
-            <input type="text" id="user-input" readonly placeholder="Нажмите клавиши ниже" autocomplete="off">
-            <button class="action-btn" onclick="checkInput()">Проверить</button>
-          </div>
-        `;
-        document.getElementById('arm-keyboard').style.display = 'flex';
-
-      } else if (currentMode === 1) {
-        badge.innerText = 'Перевод на русский';
-        prompt.innerText = currentWord.armenian;
-        renderOptions('russian', getDistractors('russian', currentWord.russian));
-
-      } else if (currentMode === 2) {
-        badge.innerText = 'Выбор армянского слова';
-        prompt.innerText = currentWord.russian;
-        renderOptions('armenian', getDistractors('armenian', currentWord.armenian));
-
-      } else if (currentMode === 3) {
-        badge.innerText = 'Аудиопроверка';
-        prompt.innerText = 'Прослушайте и выберите слово';
-        playAudio();
-        renderOptions('russian', getDistractors('russian', currentWord.russian));
-      }
-
-      updateStats();
-    }
-
-    function typeChar(char) {
-      const input = document.getElementById('user-input');
-      if (input) input.value += char;
-    }
-
-    function deleteChar() {
-      const input = document.getElementById('user-input');
-      if (input) input.value = input.value.slice(0, -1);
-    }
-
-    function getDistractors(field, correctValue) {
-      let pool = words.map(w => w[field]).filter(v => v !== correctValue);
-      pool.sort(() => Math.random() - 0.5);
-      let options = pool.slice(0, 3);
-      options.push(correctValue);
-      options.sort(() => Math.random() - 0.5);
-      return options;
-    }
-
-    function renderOptions(field, options) {
-      const area = document.getElementById('exercise-area');
-      let html = '<div class="options-grid">';
-      options.forEach(opt => {
-        // Убрали любые предварительные классы, кнопки чистые
-        html += `<button class="opt-btn" onclick="checkOption(this, '${opt.replace(/'/g, "\\'")}', '${currentWord[field].replace(/'/g, "\\'")}')">${opt}</button>`;
-      });
-      html += '</div>';
-      area.innerHTML = html;
-    }
-
-    function checkInput() {
-      if (waitingForNext) return;
-      const input = document.getElementById('user-input');
-      if (!input) return;
-      const val = input.value.trim();
-      const isCorrect = val.toLowerCase() === currentWord.armenian.toLowerCase();
-      handleAnswer(isCorrect);
-    }
-
-    function checkOption(btn, selected, correct) {
-      if (waitingForNext) return;
-      const isCorrect = selected === correct;
-      const buttons = document.querySelectorAll('.opt-btn');
-      buttons.forEach(b => {
-        if (b.innerText === correct) b.classList.add('correct');
-        if (b === btn && !isCorrect) b.classList.add('wrong');
-        b.onclick = null;
-      });
-      handleAnswer(isCorrect);
-    }
-
-    function handleAnswer(isCorrect) {
-      waitingForNext = true;
-      const msg = document.getElementById('feedback-msg');
-      const cardBox = document.getElementById('card-box');
-      
-      showImage(currentWord.russian);
-      document.getElementById('prompt-text').innerText = `${currentWord.armenian} — ${currentWord.russian}`;
-      document.getElementById('arm-keyboard').style.display = 'none';
-
-      if (isCorrect) {
-        cardBox.style.borderColor = 'var(--accent-green)';
-        msg.style.color = 'var(--accent-green)';
-        msg.innerText = 'Верно';
-        currentWord.level = Math.min(7, currentWord.level + 1);
-        saveProgressToSheet(currentWord.armenian, currentWord.level);
-        setTimeout(nextQuestion, 1400);
-      } else {
-        cardBox.style.borderColor = 'var(--accent-rose)';
-        msg.style.color = 'var(--accent-rose)';
-        msg.innerText = `Ошибка: ${currentWord.armenian}`;
-        currentWord.level = Math.max(0, currentWord.level - 1);
-        saveProgressToSheet(currentWord.armenian, currentWord.level);
-        document.getElementById('exercise-area').innerHTML = '';
-        document.getElementById('next-btn').style.display = 'block';
-      }
-    }
-
-    function showImage(keyword) {
-      const clean = keyword.split(/[,;(]/)[0].trim();
-      const imgBox = document.getElementById('img-box');
-      const img = document.getElementById('card-img');
-      img.src = `https://picsum.photos/seed/${encodeURIComponent(clean)}/400/250`;
-      imgBox.style.display = 'block';
-    }
-
-    function playAudio() {
-      if (!currentWord) return;
-      // Внешний облачный синтезатор для гарантии озвучки на iOS
-      const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(currentWord.armenian)}&tl=hy&client=tw-ob`;
-      const audio = new Audio(audioUrl);
-      audio.play().catch(err => {
-        console.warn('Ошибка воспроизведения аудио:', err);
-      });
-    }
-
-    function markAsKnown() {
-      if (!currentWord) return;
-      currentWord.level = 7;
-      saveProgressToSheet(currentWord.armenian, 7);
-      nextQuestion();
-    }
-
-    function updateStats() {
-      const learned = words.filter(w => w.level >= 7).length;
-      document.getElementById('stats-counter').innerText = `Выучено: ${learned} / ${words.length}`;
-    }
-
-    init();
-  </script>
-</body>
-</html>
+          <div class="
