@@ -2,7 +2,7 @@
 <html lang="hy">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Հայերենի Քարտեր</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <style>
@@ -19,7 +19,7 @@
       --border-color: #e2e8f0;
     }
 
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background: var(--bg-color);
@@ -30,7 +30,7 @@
       justify-content: space-between;
       min-height: 100vh;
       margin: 0;
-      padding: 20px;
+      padding: 15px;
     }
 
     header {
@@ -41,24 +41,24 @@
       align-items: center;
       padding: 10px 0;
       border-bottom: 2px solid var(--border-color);
-      margin-bottom: 15px;
+      margin-bottom: 10px;
     }
 
     .logo {
       font-weight: 800;
       font-size: 20px;
-      color: var(--primary);
+      color: var(--text-main);
       letter-spacing: -0.5px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
 
-    /* Иллюстрация граната (SVG) */
-    .pomegranate-icon {
-      width: 24px;
-      height: 24px;
-      fill: #be123c;
+    .logo-img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      border-radius: 50%;
     }
 
     .stats {
@@ -84,8 +84,8 @@
       width: 100%;
       background: var(--card-bg);
       border-radius: 24px;
-      box-shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-      padding: 24px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+      padding: 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -96,11 +96,11 @@
 
     .img-box {
       width: 100%;
-      height: 160px;
+      height: 150px;
       border-radius: 16px;
       overflow: hidden;
       background: #f1f5f9;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
       display: none;
     }
     .img-box img {
@@ -110,22 +110,22 @@
     }
 
     .mode-badge {
-      font-size: 12px;
+      font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 1px;
       font-weight: 700;
-      color: var(--primary);
-      background: #f3e8ff;
+      color: var(--text-muted);
+      background: #f1f5f9;
       padding: 4px 10px;
       border-radius: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .prompt-text {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 700;
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
       color: var(--text-main);
     }
 
@@ -133,32 +133,67 @@
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
     input[type="text"] {
       width: 100%;
-      padding: 14px 16px;
+      padding: 12px 14px;
       font-size: 18px;
       border: 2px solid var(--border-color);
       border-radius: 14px;
       outline: none;
-      transition: border-color 0.2s;
+      background: #fff;
+      text-align: center;
+      color: var(--text-main);
+    }
+
+    /* Восточно-армянская клавиатура Mac (խվէրդե...) */
+    .armenian-keyboard {
+      display: none;
+      width: 100%;
+      background: #e2e8f0;
+      border-radius: 16px;
+      padding: 8px;
+      gap: 6px;
+      flex-direction: column;
+      margin-top: 10px;
+    }
+    .kb-row {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+    }
+    .kb-key {
+      flex: 1;
+      background: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 0;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      cursor: pointer;
       text-align: center;
     }
-    input[type="text"]:focus {
-      border-color: var(--primary);
+    .kb-key:active {
+      background: #cbd5e1;
+    }
+    .kb-key.action {
+      background: #cbd5e1;
+      font-size: 13px;
     }
 
     .options-grid {
       width: 100%;
       display: grid;
       grid-template-columns: 1fr;
-      gap: 10px;
+      gap: 8px;
     }
     .opt-btn {
       width: 100%;
-      padding: 14px;
-      font-size: 16px;
+      padding: 12px;
+      font-size: 15px;
       font-weight: 600;
       background: #f8fafc;
       border: 2px solid var(--border-color);
@@ -170,7 +205,7 @@
     }
     .opt-btn:hover {
       background: #f1f5f9;
-      border-color: var(--primary);
+      border-color: #cbd5e1;
     }
     .opt-btn.correct {
       background: #d1fae5 !important;
@@ -185,27 +220,26 @@
 
     .action-btn {
       width: 100%;
-      margin-top: 16px;
-      padding: 14px;
-      font-size: 16px;
+      margin-top: 10px;
+      padding: 12px;
+      font-size: 15px;
       font-weight: 700;
-      background: var(--primary);
+      background: var(--text-main);
       color: white;
       border: none;
       border-radius: 14px;
       cursor: pointer;
-      transition: background 0.2s;
     }
-    .action-btn:hover { background: var(--primary-hover); }
 
+    /* Зеленая кнопка Дальше */
     .next-btn {
       width: 100%;
-      margin-top: 16px;
-      padding: 14px;
-      font-size: 16px;
+      margin-top: 10px;
+      padding: 12px;
+      font-size: 15px;
       font-weight: 700;
-      background: var(--accent-yellow);
-      color: #78350f;
+      background: var(--accent-green);
+      color: white;
       border: none;
       border-radius: 14px;
       cursor: pointer;
@@ -216,36 +250,44 @@
       width: 100%;
       max-width: 400px;
       display: flex;
-      gap: 12px;
-      margin-top: 20px;
+      gap: 10px;
+      margin-top: 15px;
+      align-items: center;
     }
+    
+    /* Маленькая нейтральная кнопка Знаю */
     .btn-know {
-      flex: 1;
-      padding: 14px;
-      background: #d1fae5;
-      color: #065f46;
-      border: none;
-      border-radius: 14px;
-      font-weight: 700;
-      font-size: 15px;
+      padding: 10px 16px;
+      background: #f1f5f9;
+      color: var(--text-muted);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 13px;
       cursor: pointer;
     }
+    .btn-know:hover {
+      background: #e2e8f0;
+      color: var(--text-main);
+    }
+
     .btn-audio {
-      padding: 14px 20px;
+      padding: 10px 16px;
       background: #fef3c7;
       color: #92400e;
-      border: none;
-      border-radius: 14px;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
       font-weight: 700;
       cursor: pointer;
+      font-size: 13px;
     }
 
     .feedback-msg {
-      margin-top: 15px;
+      margin-top: 10px;
       font-weight: 700;
-      font-size: 16px;
+      font-size: 15px;
       text-align: center;
-      min-height: 24px;
+      min-height: 22px;
     }
   </style>
 </head>
@@ -253,10 +295,7 @@
 
   <header>
     <div class="logo">
-      <!-- Векторная иконка граната -->
-      <svg class="pomegranate-icon" viewBox="0 0 24 24">
-        <path d="M12 2C10.5 2 9.8 3 9.5 3.8C8 3.5 6.5 4.2 5.8 5.5C5 7 5.2 9 4.5 10.5C3.5 12 3 14 4 16C5 18 7 21 10 22C11 22.3 13 22.3 14 22C17 21 19 18 20 16C21 14 20.5 12 19.5 10.5C18.8 9 19 7 18.2 5.5C17.5 4.2 16 3.5 14.5 3.8C14.2 3 13.5 2 12 2M11 4H13V6H11V4Z"/>
-      </svg>
+      <img src="<Image src="image_generation_content/11191756052859384341" alt="Гранат" />" class="logo-img" alt="Гранат">
       Հայերեն
     </div>
     <div class="stats" id="stats-counter">Սովորված: 0</div>
@@ -268,18 +307,73 @@
         <img id="card-img" src="" alt="Иллюстрация">
       </div>
       
-      <div class="mode-badge" id="mode-badge">Բեռնվում է...</div>
-      <div class="prompt-text" id="prompt-text">Համեցեք...</div>
+      <div class="mode-badge" id="mode-badge">Загрузка</div>
+      <div class="prompt-text" id="prompt-text">Секунду</div>
 
       <div id="exercise-area" style="width: 100%;"></div>
-      <button class="next-btn" id="next-btn" onclick="nextQuestion()">Հաջորդը ➔</button>
+      
+      <!-- Восточно-армянская клавиатура Mac (խվէրդե...) -->
+      <div class="armenian-keyboard" id="arm-keyboard">
+        <div class="kb-row">
+          <button class="kb-key" onclick="typeChar('խ')">խ</button>
+          <button class="kb-key" onclick="typeChar('վ')">վ</button>
+          <button class="kb-key" onclick="typeChar('է')">է</button>
+          <button class="kb-key" onclick="typeChar('ռ')">ռ</button>
+          <button class="kb-key" onclick="typeChar('տ')">տ</button>
+          <button class="kb-key" onclick="typeChar('ը')">ը</button>
+          <button class="kb-key" onclick="typeChar('ւ')">ւ</button>
+          <button class="kb-key" onclick="typeChar('ի')">ի</button>
+          <button class="kb-key" onclick="typeChar('օ')">օ</button>
+          <button class="kb-key" onclick="typeChar('պ')">պ</button>
+        </div>
+        <div class="kb-row">
+          <button class="kb-key" onclick="typeChar('ա')">ա</button>
+          <button class="kb-key" onclick="typeChar('ս')">ս</button>
+          <button class="kb-key" onclick="typeChar('դ')">դ</button>
+          <button class="kb-key" onclick="typeChar('ֆ')">ֆ</button>
+          <button class="kb-key" onclick="typeChar('գ')">գ</button>
+          <button class="kb-key" onclick="typeChar('հ')">հ</button>
+          <button class="kb-key" onclick="typeChar('յ')">յ</button>
+          <button class="kb-key" onclick="typeChar('կ')">կ</button>
+          <button class="kb-key" onclick="typeChar('լ')">լ</button>
+          <button class="kb-key" onclick="typeChar('ձ')">ձ</button>
+        </div>
+        <div class="kb-row">
+          <button class="kb-key" onclick="typeChar('զ')">զ</button>
+          <button class="kb-key" onclick="typeChar('ծ')">ծ</button>
+          <button class="kb-key" onclick="typeChar('ղ')">ղ</button>
+          <button class="kb-key" onclick="typeChar('փ')">փ</button>
+          <button class="kb-key" onclick="typeChar('բ')">բ</button>
+          <button class="kb-key" onclick="typeChar('ն')">ն</button>
+          <button class="kb-key" onclick="typeChar('մ')">մ</button>
+          <button class="kb-key" onclick="typeChar('շ')">շ</button>
+          <button class="kb-key" onclick="deleteChar()">⌫</button>
+        </div>
+        <div class="kb-row">
+          <button class="kb-key" onclick="typeChar('ջ')">ջ</button>
+          <button class="kb-key" onclick="typeChar('ճ')">ճ</button>
+          <button class="kb-key" onclick="typeChar('ք')">ք</button>
+          <button class="kb-key" onclick="typeChar('ց')">ց</button>
+          <button class="kb-key" onclick="typeChar('և')">և</button>
+          <button class="kb-key" onclick="typeChar('չ')">չ</button>
+          <button class="kb-key" onclick="typeChar('ո')">ո</button>
+          <button class="kb-key" onclick="typeChar('ե')">ե</button>
+        </div>
+        <div class="kb-row">
+          <button class="kb-key" style="flex: 4;" onclick="typeChar(' ')">пробел</button>
+          <button class="kb-key action" style="flex: 2; background: var(--text-main); color: #fff;" onclick="checkInput()">OK</button>
+        </div>
+      </div>
+
+      <button class="next-btn" id="next-btn" onclick="nextQuestion()">Дальше ➔</button>
 
       <div class="feedback-msg" id="feedback-msg"></div>
     </div>
 
     <div class="footer-controls">
-      <button class="btn-audio" onclick="playAudio()" title="Լսել">🔊 Լսել</button>
-      <button class="btn-know" onclick="markAsKnown()">Գիտեմ</button>
+      <button class="btn-audio" onclick="playAudio()">🔊 Слушать</button>
+      <div style="flex: 1;"></div>
+      <button class="btn-know" onclick="markAsKnown()">Знаю слово</button>
     </div>
   </div>
 
@@ -307,16 +401,15 @@
             if (text && text.length > 20) return text;
           }
         } catch (e) {
-          console.warn('Ошибка загрузки с прокси:', url);
+          console.warn('Ошибка загрузки:', url);
         }
       }
-      throw new Error('Все варианты загрузки недоступны');
+      throw new Error('Недоступно');
     }
 
     async function init() {
       try {
         const csvText = await fetchCSV();
-
         Papa.parse(csvText, {
           header: false,
           skipEmptyLines: true,
@@ -328,22 +421,17 @@
                 const arm = r[0] ? r[0].trim() : '';
                 const ru = r[1] ? r[1].trim() : '';
                 const vitchak = r[2] ? parseInt(r[2]) || 0 : 0;
-
                 if (arm && arm !== 'բառ' && !arm.startsWith('#')) {
                   words.push({ armenian: arm, russian: ru, level: vitchak });
                 }
               }
             }
-
-            if (words.length > 0) {
-              nextQuestion();
-            } else {
-              document.getElementById('prompt-text').innerText = 'Տվյալներ չկան';
-            }
+            if (words.length > 0) nextQuestion();
+            else document.getElementById('prompt-text').innerText = 'Нет данных';
           }
         });
       } catch (e) {
-        document.getElementById('prompt-text').innerText = 'Բեռնման սխալ';
+        document.getElementById('prompt-text').innerText = 'Ошибка загрузки';
       }
     }
 
@@ -353,7 +441,7 @@
         const url = `${SAVE_API_URL}?word=${encodeURIComponent(armenianWord)}&level=${level}`;
         await fetch(url, { mode: 'no-cors' });
       } catch (err) {
-        console.error('Ошибка сохранения уровня:', err);
+        console.error(err);
       }
     }
 
@@ -362,11 +450,12 @@
       document.getElementById('feedback-msg').innerText = '';
       document.getElementById('img-box').style.display = 'none';
       document.getElementById('next-btn').style.display = 'none';
+      document.getElementById('arm-keyboard').style.display = 'none';
       document.getElementById('card-box').style.borderColor = 'var(--border-color)';
 
       const activeWords = words.filter(w => w.level < 7);
       if (activeWords.length === 0) {
-        document.getElementById('prompt-text').innerText = '🎉 Բոլոր բառերը սովորված են!';
+        document.getElementById('prompt-text').innerText = 'Все слова выучены';
         document.getElementById('exercise-area').innerHTML = '';
         return;
       }
@@ -380,35 +469,44 @@
       area.innerHTML = '';
 
       if (currentMode === 0) {
-        badge.innerText = 'Գրել հայերեն (Ռուսերենից)';
+        badge.innerText = 'Написание по-армянски';
         prompt.innerText = currentWord.russian;
         area.innerHTML = `
           <div class="input-box">
-            <input type="text" id="user-input" placeholder="Գրեք հայերեն..." autocomplete="off">
-            <button class="action-btn" onclick="checkInput()">Ստուգել</button>
+            <input type="text" id="user-input" readonly placeholder="Нажмите клавиши ниже" autocomplete="off">
+            <button class="action-btn" onclick="checkInput()">Проверить</button>
           </div>
         `;
-        document.getElementById('user-input').focus();
-        document.getElementById('user-input').addEventListener('keypress', (e) => { if(e.key === 'Enter') checkInput(); });
+        document.getElementById('arm-keyboard').style.display = 'flex';
 
       } else if (currentMode === 1) {
-        badge.innerText = 'Թարգմանություն (Հայերենից Ռուսերեն)';
+        badge.innerText = 'Перевод на русский';
         prompt.innerText = currentWord.armenian;
         renderOptions('russian', getDistractors('russian', currentWord.russian));
 
       } else if (currentMode === 2) {
-        badge.innerText = 'Ընտրել բառը (Ռուսերենից)';
+        badge.innerText = 'Выбор армянского слова';
         prompt.innerText = currentWord.russian;
         renderOptions('armenian', getDistractors('armenian', currentWord.armenian));
 
       } else if (currentMode === 3) {
-        badge.innerText = 'Լսել և գուշակել (Աուդիո)';
-        prompt.innerText = '🔊 Լսեք ձայնը...';
+        badge.innerText = 'Аудиопроверка';
+        prompt.innerText = 'Прослушайте и выберите слово';
         playAudio();
         renderOptions('russian', getDistractors('russian', currentWord.russian));
       }
 
       updateStats();
+    }
+
+    function typeChar(char) {
+      const input = document.getElementById('user-input');
+      if (input) input.value += char;
+    }
+
+    function deleteChar() {
+      const input = document.getElementById('user-input');
+      if (input) input.value = input.value.slice(0, -1);
     }
 
     function getDistractors(field, correctValue) {
@@ -424,6 +522,7 @@
       const area = document.getElementById('exercise-area');
       let html = '<div class="options-grid">';
       options.forEach(opt => {
+        // Убрали любые предварительные классы, кнопки чистые
         html += `<button class="opt-btn" onclick="checkOption(this, '${opt.replace(/'/g, "\\'")}', '${currentWord[field].replace(/'/g, "\\'")}')">${opt}</button>`;
       });
       html += '</div>';
@@ -432,7 +531,9 @@
 
     function checkInput() {
       if (waitingForNext) return;
-      const val = document.getElementById('user-input').value.trim();
+      const input = document.getElementById('user-input');
+      if (!input) return;
+      const val = input.value.trim();
       const isCorrect = val.toLowerCase() === currentWord.armenian.toLowerCase();
       handleAnswer(isCorrect);
     }
@@ -456,18 +557,19 @@
       
       showImage(currentWord.russian);
       document.getElementById('prompt-text').innerText = `${currentWord.armenian} — ${currentWord.russian}`;
+      document.getElementById('arm-keyboard').style.display = 'none';
 
       if (isCorrect) {
         cardBox.style.borderColor = 'var(--accent-green)';
         msg.style.color = 'var(--accent-green)';
-        msg.innerText = '✨ Ճիշտ է!';
+        msg.innerText = 'Верно';
         currentWord.level = Math.min(7, currentWord.level + 1);
         saveProgressToSheet(currentWord.armenian, currentWord.level);
-        setTimeout(nextQuestion, 1000);
+        setTimeout(nextQuestion, 1400);
       } else {
         cardBox.style.borderColor = 'var(--accent-rose)';
         msg.style.color = 'var(--accent-rose)';
-        msg.innerText = `❌ Սխալ է: ${currentWord.armenian}`;
+        msg.innerText = `Ошибка: ${currentWord.armenian}`;
         currentWord.level = Math.max(0, currentWord.level - 1);
         saveProgressToSheet(currentWord.armenian, currentWord.level);
         document.getElementById('exercise-area').innerHTML = '';
@@ -479,30 +581,30 @@
       const clean = keyword.split(/[,;(]/)[0].trim();
       const imgBox = document.getElementById('img-box');
       const img = document.getElementById('card-img');
-      img.src = `https://loremflickr.com/400/250/${encodeURIComponent(clean)}`;
+      img.src = `https://picsum.photos/seed/${encodeURIComponent(clean)}/400/250`;
       imgBox.style.display = 'block';
     }
 
     function playAudio() {
       if (!currentWord) return;
-      if (!('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(currentWord.armenian);
-      utterance.lang = 'hy-AM';
-      window.speechSynthesis.speak(utterance);
+      // Внешний облачный синтезатор для гарантии озвучки на iOS
+      const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(currentWord.armenian)}&tl=hy&client=tw-ob`;
+      const audio = new Audio(audioUrl);
+      audio.play().catch(err => {
+        console.warn('Ошибка воспроизведения аудио:', err);
+      });
     }
 
     function markAsKnown() {
       if (!currentWord) return;
       currentWord.level = 7;
       saveProgressToSheet(currentWord.armenian, 7);
-      alert(`Բառը ("${currentWord.armenian}") նշվեց որպես սովորված։`);
       nextQuestion();
     }
 
     function updateStats() {
       const learned = words.filter(w => w.level >= 7).length;
-      document.getElementById('stats-counter').innerText = `Սովորված: ${learned} / ${words.length}`;
+      document.getElementById('stats-counter').innerText = `Выучено: ${learned} / ${words.length}`;
     }
 
     init();
