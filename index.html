@@ -252,24 +252,43 @@
 
   <script>
     const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSzY_RxdjH_dkidV-IP2EjpHwa-jm5uCSoampbOqYF4QOz2IKvfUSTVOVfUIyp89qTIuPOmdHZ_iBwS/pub?output=csv';
-    const PROXY_URL = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(CSV_URL);
     const SAVE_API_URL = 'https://script.google.com/macros/s/AKfycbyKYPb6zu0bO6NAtsm2vJoNn_YKk63MS8xeUjdCKIfflXvtPrCB0u62UVVTV82EKE6F/exec';
+
+    const PROXIES = [
+      'https://corsproxy.io/?' + encodeURIComponent(CSV_URL),
+      'https://api.allorigins.win/raw?url=' + encodeURIComponent(CSV_URL),
+      CSV_URL
+    ];
 
     let words = [];
     let currentWord = null;
     let currentMode = 0;
 
+    async function fetchCSV() {
+      for (let url of PROXIES) {
+        try {
+          const res = await fetch(url);
+          if (res.ok) {
+            const text = await res.text();
+            if (text && text.length > 20) return text;
+          }
+        } catch (e) {
+          console.warn('Ошибка загрузки с прокси:', url);
+        }
+      }
+      throw new Error('Все варианты загрузки недоступны');
+    }
+
     async function init() {
       try {
-        const response = await fetch(PROXY_URL);
-        const csvText = await response.text();
+        const csvText = await fetchCSV();
 
         Papa.parse(csvText, {
           header: false,
           skipEmptyLines: true,
           complete: function(results) {
             const rows = results.data;
-            for (let i = 0; i < rows.length; i++) {
+            for (let i = 1; i < rows.length; i++) {
               const r = rows[i];
               if (r.length >= 2) {
                 const arm = r[0] ? r[0].trim() : '';
