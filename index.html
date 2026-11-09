@@ -10,13 +10,14 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
 
-  <!-- Теги для iOS PWA и статус-бара -->
+  <!-- Теги для iOS PWA без размытия статус-бара -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="theme-color" content="#6d28d9">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
-  <link rel="manifest" href="manifest.json">
+
+  <!-- Вшитая SVG иконка Граната (работает и в закладках браузера, и на рабочем столе iOS) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%236d28d9'/%3E%3Cpath d='M28 8L32 2L36 8L42 4L40 12C50 16 56 26 56 38C56 51.2548 45.2548 62 32 62C18.7452 62 8 51.2548 8 38C8 26 14 16 24 12L22 4L28 8Z' fill='%23BE123C'/%3E%3Cpath d='M32 18C41.9411 18 50 26.0589 50 36C50 45.9411 41.9411 54 32 54C22.0589 54 14 45.9411 14 36C14 26.0589 22.0589 18 32 18Z' fill='%23E11D48'/%3E%3Ccircle cx='26' cy='30' r='3' fill='%23881337'/%3E%3Ccircle cx='34' cy='28' r='3.5' fill='%23881337'/%3E%3Ccircle cx='38' cy='36' r='3' fill='%23881337'/%3E%3Ccircle cx='28' cy='40' r='3.5' fill='%23881337'/%3E%3Ccircle cx='34' cy='44' r='3' fill='%23881337'/%3E%3Cpath d='M40 10C46 6 52 8 54 10C52 14 46 14 40 10Z' fill='%2315803D'/%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%236d28d9'/%3E%3Cpath d='M28 8L32 2L36 8L42 4L40 12C50 16 56 26 56 38C56 51.2548 45.2548 62 32 62C18.7452 62 8 51.2548 8 38C8 26 14 16 24 12L22 4L28 8Z' fill='%23BE123C'/%3E%3Cpath d='M32 18C41.9411 18 50 26.0589 50 36C50 45.9411 41.9411 54 32 54C22.0589 54 14 45.9411 14 36C14 26.0589 22.0589 18 32 18Z' fill='%23E11D48'/%3E%3Ccircle cx='26' cy='30' r='3' fill='%23881337'/%3E%3Ccircle cx='34' cy='28' r='3.5' fill='%23881337'/%3E%3Ccircle cx='38' cy='36' r='3' fill='%23881337'/%3E%3Ccircle cx='28' cy='40' r='3.5' fill='%23881337'/%3E%3Ccircle cx='34' cy='44' r='3' fill='%23881337'/%3E%3Cpath d='M40 10C46 6 52 8 54 10C52 14 46 14 40 10Z' fill='%2315803D'/%3E%3C/svg%3E">
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <style>
@@ -38,7 +39,7 @@
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
     
     html {
-      background: var(--primary); /* Чтобы зона за челкой в iOS PWA была фиолетовой */
+      background: var(--primary);
     }
 
     body {
@@ -56,7 +57,7 @@
       overflow: hidden;
     }
 
-    /* Шапка с безопасным отступом под челку iOS (safe-area-inset-top) */
+    /* Шапка с безопасным отступом под челку iOS без размытий */
     header {
       width: 100%;
       background: var(--primary);
@@ -64,10 +65,14 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: calc(12px + env(safe-area-inset-top)) 20px 12px 20px;
+      padding-top: max(16px, env(safe-area-inset-top));
+      padding-bottom: 14px;
+      padding-left: 20px;
+      padding-right: 20px;
       box-shadow: 0 4px 12px rgba(109, 40, 217, 0.2);
       position: relative;
       flex-shrink: 0;
+      z-index: 100;
       /* Настоящая ковровая бахрома с висюльками через SVG */
       border-bottom: 10px solid transparent;
       border-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 10' width='20' height='10'%3E%3Cpath d='M0 0 L2 10 L4 0 L6 10 L8 0 L10 10 L12 0 L14 10 L16 0 L18 10 L20 0 Z' fill='%23e2e8f0'/%3E%3C/svg%3E") 0 0 10 0 repeat;
@@ -604,7 +609,6 @@
       if (input) {
         input.value += (isShift ? upper : lower);
       }
-      // Одиночный ввод заглавной буквы: если Shift был включен, отжимаем его после ввода буквы
       if (isShift) {
         isShift = false;
         const btn = document.getElementById('shift-btn');
