@@ -29,13 +29,15 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
+      justify-content: space-between;
+      height: 100vh;
+      height: 100dvh;
       margin: 0;
       padding: 0;
+      overflow: hidden;
     }
 
-    /* Шапка с фиолетовой заливкой и армянской бахромой снизу */
+    /* Шапка с реальной бахромой-кисточками снизу */
     header {
       width: 100%;
       background: var(--primary);
@@ -43,26 +45,28 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 14px 20px;
+      padding: 12px 20px;
       box-shadow: 0 4px 12px rgba(109, 40, 217, 0.2);
       position: relative;
-      /* Имитация бахромы армянского ковра по нижнему краю */
-      border-bottom: 5px dashed #c4b5fd;
+      flex-shrink: 0;
+      /* Настоящая ковровая бахрома с висюльками через SVG-узор */
+      border-bottom: 10px solid transparent;
+      border-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 10' width='20' height='10'%3E%3Cpath d='M0 0 L2 10 L4 0 L6 10 L8 0 L10 10 L12 0 L14 10 L16 0 L18 10 L20 0 Z' fill='%23e2e8f0'/%3E%3C/svg%3E") 0 0 10 0 repeat;
     }
 
     .logo {
       font-weight: 900;
-      font-size: 22px;
+      font-size: 20px;
       color: #ffffff;
       letter-spacing: -0.5px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .pomegranate-svg {
-      width: 30px;
-      height: 30px;
+      width: 26px;
+      height: 26px;
       filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
     }
 
@@ -71,11 +75,12 @@
       font-weight: 700;
       color: #f1f5f9;
       background: rgba(255, 255, 255, 0.15);
-      padding: 5px 12px;
+      padding: 4px 10px;
       border-radius: 20px;
       border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
+    /* Контейнер всегда приподнят, карточки адаптируются без прыжков футера */
     .app-container {
       width: 100%;
       max-width: 400px;
@@ -84,16 +89,16 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 15px;
-      margin-top: -10px; /* Сдвигаем чуть выше для баланса */
+      padding: 10px 15px;
+      overflow-y: auto;
     }
 
     .card {
       width: 100%;
       background: var(--card-bg);
-      border-radius: 24px;
-      box-shadow: 0 12px 30px -5px rgba(109, 40, 217, 0.12), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      padding: 22px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px -5px rgba(109, 40, 217, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      padding: 18px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -102,35 +107,37 @@
       transition: all 0.3s ease;
     }
 
-    /* Бейдж "ՆՈՐ" в виде scream bubble на углу карточки */
+    /* Игольчатый скин-пузырь (comic scream bubble с острыми шипами) для плашки ՆՈՐ */
     .new-badge {
       position: absolute;
-      top: -12px;
-      right: 18px;
-      background: linear-gradient(135deg, #f43f5e, #f97316);
+      top: -14px;
+      right: 14px;
+      background: #e11d48;
       color: white;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 900;
-      padding: 4px 10px;
-      border-radius: 12px 12px 2px 12px;
-      box-shadow: 0 4px 10px rgba(244, 63, 94, 0.35);
-      letter-spacing: 0.5px;
+      padding: 3px 9px;
+      border-radius: 4px;
+      box-shadow: 0 3px 8px rgba(225, 29, 72, 0.4);
+      letter-spacing: 1px;
       display: none;
       z-index: 10;
-      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    @keyframes popIn {
-      0% { transform: scale(0); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
+      clip-path: polygon(
+        0% 20%, 20% 0%, 35% 15%, 50% 0%, 65% 15%, 80% 0%, 100% 20%, 
+        85% 35%, 100% 50%, 85% 65%, 100% 80%, 80% 100%, 
+        65% 85%, 50% 100%, 35% 85%, 20% 100%, 0% 80%, 
+        15% 65%, 0% 50%, 15% 35%
+      );
+      transform: rotate(3deg);
     }
 
     .img-box {
       width: 100%;
-      height: 150px;
-      border-radius: 16px;
+      height: 130px;
+      border-radius: 12px;
       overflow: hidden;
       background: #f1f5f9;
-      margin-bottom: 14px;
+      margin-bottom: 10px;
       display: none;
     }
     .img-box img {
@@ -140,11 +147,11 @@
     }
 
     .prompt-text {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 800;
       text-align: center;
-      margin-top: 6px;
-      margin-bottom: 18px;
+      margin-top: 4px;
+      margin-bottom: 14px;
       color: var(--text-main);
     }
 
@@ -152,15 +159,15 @@
       width: 100%;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
     input[type="text"] {
       width: 100%;
-      padding: 14px;
-      font-size: 19px;
+      padding: 12px;
+      font-size: 18px;
       font-weight: 600;
       border: 2px solid var(--border-color);
-      border-radius: 14px;
+      border-radius: 12px;
       outline: none;
       background: #faf5ff;
       text-align: center;
@@ -171,11 +178,11 @@
       display: none;
       width: 100%;
       background: #ede9fe;
-      border-radius: 16px;
-      padding: 8px;
-      gap: 5px;
+      border-radius: 14px;
+      padding: 6px;
+      gap: 4px;
       flex-direction: column;
-      margin-top: 10px;
+      margin-top: 8px;
       border: 1px solid var(--border-color);
     }
     .kb-row {
@@ -187,9 +194,9 @@
       flex: 1;
       background: #ffffff;
       border: 1px solid #ddd6fe;
-      border-radius: 7px;
-      padding: 9px 0;
-      font-size: 15px;
+      border-radius: 6px;
+      padding: 7px 0;
+      font-size: 14px;
       font-weight: 700;
       color: var(--text-main);
       box-shadow: 0 2px 0 rgba(109, 40, 217, 0.15);
@@ -214,16 +221,16 @@
       width: 100%;
       display: grid;
       grid-template-columns: 1fr;
-      gap: 10px;
+      gap: 8px;
     }
     .opt-btn {
       width: 100%;
-      padding: 14px;
-      font-size: 16px;
+      padding: 12px;
+      font-size: 15px;
       font-weight: 700;
       background: #ffffff;
       border: 2px solid var(--border-color);
-      border-radius: 14px;
+      border-radius: 12px;
       cursor: pointer;
       transition: all 0.2s;
       color: var(--text-main);
@@ -236,28 +243,28 @@
 
     .action-btn {
       width: 100%;
-      margin-top: 10px;
-      padding: 14px;
-      font-size: 16px;
+      margin-top: 8px;
+      padding: 12px;
+      font-size: 15px;
       font-weight: 800;
       background: var(--primary);
       color: white;
       border: none;
-      border-radius: 14px;
+      border-radius: 12px;
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(109, 40, 217, 0.25);
     }
 
     .btn-know-inside {
       width: 100%;
-      padding: 14px;
-      margin-top: 10px;
+      padding: 12px;
+      margin-top: 8px;
       background: var(--accent-green);
       color: white;
       border: none;
-      border-radius: 14px;
+      border-radius: 12px;
       font-weight: 800;
-      font-size: 16px;
+      font-size: 15px;
       cursor: pointer;
       display: none;
       text-align: center;
@@ -267,52 +274,56 @@
       transform: scale(0.98);
     }
 
-    /* Фиксированный футер для строгого выравнивания кнопок на одном уровне */
+    /* Жестко зафиксированный футер с неизменной высотой внизу экрана */
     .footer-controls {
       width: 100%;
       max-width: 400px;
+      padding: 0 15px 15px 15px;
       display: flex;
       gap: 10px;
-      margin-top: 16px;
       align-items: center;
-      min-height: 52px;
+      flex-shrink: 0;
+      height: 65px;
     }
     
     .btn-dont-know {
       width: 100%;
-      padding: 14px;
+      height: 48px;
       background: var(--accent-yellow);
       color: #78350f;
       border: 2px solid var(--accent-yellow-border);
-      border-radius: 14px;
+      border-radius: 12px;
       font-weight: 800;
       font-size: 15px;
       cursor: pointer;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       box-shadow: 0 4px 10px rgba(254, 240, 138, 0.3);
     }
 
     .next-btn {
       width: 100%;
-      padding: 14px;
+      height: 48px;
       font-size: 15px;
       font-weight: 800;
       background: var(--accent-pink);
       color: #701a75;
       border: none;
-      border-radius: 14px;
+      border-radius: 12px;
       cursor: pointer;
       display: none;
-      text-align: center;
+      align-items: center;
+      justify-content: center;
       box-shadow: 0 4px 12px rgba(255, 134, 224, 0.4);
     }
 
     .feedback-msg {
-      margin-top: 10px;
+      margin-top: 8px;
       font-weight: 800;
-      font-size: 17px;
+      font-size: 16px;
       text-align: center;
-      min-height: 24px;
+      min-height: 22px;
     }
     .feedback-msg.success {
       color: var(--accent-green);
@@ -328,12 +339,12 @@
       gap: 2px;
     }
     .arm-word {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 900;
       color: var(--text-main);
     }
     .ru-word {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 600;
       color: var(--text-muted);
     }
@@ -360,7 +371,7 @@
 
   <div class="app-container">
     <div class="card" id="card-box">
-      <!-- Плашка НОР для новых слов -->
+      <!-- Игольчатый скин-пузырь ՆՈՐ -->
       <div class="new-badge" id="new-badge">ՆՈՐ</div>
 
       <div class="img-box" id="img-box">
@@ -436,12 +447,12 @@
 
       <div class="feedback-msg" id="feedback-msg"></div>
     </div>
+  </div>
 
-    <!-- Футер с выровненными кнопками -->
-    <div class="footer-controls">
-      <button class="btn-dont-know" id="btn-dont-know" onclick="revealAnswer()">Չգիտեմ</button>
-      <button class="next-btn" id="next-btn" onclick="nextQuestion()">Հաջորդը ➔</button>
-    </div>
+  <!-- Жестко зафиксированный футер снизу -->
+  <div class="footer-controls">
+    <button class="btn-dont-know" id="btn-dont-know" onclick="revealAnswer()">Չգիտեմ</button>
+    <button class="next-btn" id="next-btn" onclick="nextQuestion()">Հաջորդը ➔</button>
   </div>
 
   <script>
@@ -508,7 +519,7 @@
       document.getElementById('img-box').style.display = 'none';
       document.getElementById('next-btn').style.display = 'none';
       document.getElementById('btn-know-inside').style.display = 'none';
-      document.getElementById('btn-dont-know').style.display = 'block';
+      document.getElementById('btn-dont-know').style.display = 'flex';
       document.getElementById('arm-keyboard').style.display = 'none';
       document.getElementById('card-box').style.borderColor = 'var(--border-color)';
 
@@ -523,7 +534,6 @@
 
       currentWord = activeWords[Math.floor(Math.random() * activeWords.length)];
       
-      // Индикатор НОВОР слова (если уровень 0)
       const newBadge = document.getElementById('new-badge');
       if (currentWord.level === 0) {
         newBadge.style.display = 'block';
@@ -643,7 +653,7 @@
       document.getElementById('exercise-area').innerHTML = '';
       document.getElementById('arm-keyboard').style.display = 'none';
       document.getElementById('btn-dont-know').style.display = 'none';
-      document.getElementById('next-btn').style.display = 'block';
+      document.getElementById('next-btn').style.display = 'flex';
       document.getElementById('new-badge').style.display = 'none';
 
       const upperArm = formatArmenianCaps(currentWord.armenian);
