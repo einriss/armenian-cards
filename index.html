@@ -29,27 +29,31 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
       min-height: 100vh;
       margin: 0;
-      padding: 15px;
+      padding: 0;
     }
 
+    /* Шапка с фиолетовой заливкой и армянской бахромой снизу */
     header {
       width: 100%;
-      max-width: 400px;
+      background: var(--primary);
+      color: #f8fafc;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 0;
-      border-bottom: 2px solid var(--border-color);
-      margin-bottom: 12px;
+      padding: 14px 20px;
+      box-shadow: 0 4px 12px rgba(109, 40, 217, 0.2);
+      position: relative;
+      /* Имитация бахромы армянского ковра по нижнему краю */
+      border-bottom: 5px dashed #c4b5fd;
     }
 
     .logo {
       font-weight: 900;
       font-size: 22px;
-      color: var(--primary);
+      color: #ffffff;
       letter-spacing: -0.5px;
       display: flex;
       align-items: center;
@@ -57,19 +61,19 @@
     }
 
     .pomegranate-svg {
-      width: 32px;
-      height: 32px;
-      filter: drop-shadow(0 2px 4px rgba(190, 18, 60, 0.3));
+      width: 30px;
+      height: 30px;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
     }
 
     .stats {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
-      color: var(--primary);
-      background: var(--primary-light);
-      padding: 6px 14px;
+      color: #f1f5f9;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 5px 12px;
       border-radius: 20px;
-      border: 1px solid var(--border-color);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .app-container {
@@ -80,6 +84,8 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      padding: 15px;
+      margin-top: -10px; /* Сдвигаем чуть выше для баланса */
     }
 
     .card {
@@ -96,9 +102,31 @@
       transition: all 0.3s ease;
     }
 
+    /* Бейдж "ՆՈՐ" в виде scream bubble на углу карточки */
+    .new-badge {
+      position: absolute;
+      top: -12px;
+      right: 18px;
+      background: linear-gradient(135deg, #f43f5e, #f97316);
+      color: white;
+      font-size: 11px;
+      font-weight: 900;
+      padding: 4px 10px;
+      border-radius: 12px 12px 2px 12px;
+      box-shadow: 0 4px 10px rgba(244, 63, 94, 0.35);
+      letter-spacing: 0.5px;
+      display: none;
+      z-index: 10;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popIn {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
     .img-box {
       width: 100%;
-      height: 160px;
+      height: 150px;
       border-radius: 16px;
       overflow: hidden;
       background: #f1f5f9;
@@ -111,22 +139,11 @@
       object-fit: cover;
     }
 
-    .mode-badge {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-weight: 800;
-      color: var(--primary);
-      background: var(--primary-light);
-      padding: 5px 12px;
-      border-radius: 10px;
-      margin-bottom: 12px;
-    }
-
     .prompt-text {
       font-size: 24px;
       font-weight: 800;
       text-align: center;
+      margin-top: 6px;
       margin-bottom: 18px;
       color: var(--text-main);
     }
@@ -231,7 +248,6 @@
       box-shadow: 0 4px 12px rgba(109, 40, 217, 0.25);
     }
 
-    /* Изумрудно-зеленая кнопка "Գիտեմ" внутри карточки по центру */
     .btn-know-inside {
       width: 100%;
       padding: 14px;
@@ -251,6 +267,7 @@
       transform: scale(0.98);
     }
 
+    /* Фиксированный футер для строгого выравнивания кнопок на одном уровне */
     .footer-controls {
       width: 100%;
       max-width: 400px;
@@ -258,9 +275,9 @@
       gap: 10px;
       margin-top: 16px;
       align-items: center;
+      min-height: 52px;
     }
     
-    /* Кнопка "Չգիտեմ" (Не знаю) — светло-желтая */
     .btn-dont-know {
       width: 100%;
       padding: 14px;
@@ -272,9 +289,9 @@
       font-size: 15px;
       cursor: pointer;
       text-align: center;
+      box-shadow: 0 4px 10px rgba(254, 240, 138, 0.3);
     }
 
-    /* Кнопка "Հաջորդը" (Дальше) — розовая по центру внизу */
     .next-btn {
       width: 100%;
       padding: 14px;
@@ -291,11 +308,11 @@
     }
 
     .feedback-msg {
-      margin-top: 12px;
+      margin-top: 10px;
       font-weight: 800;
       font-size: 17px;
       text-align: center;
-      min-height: 28px;
+      min-height: 24px;
     }
     .feedback-msg.success {
       color: var(--accent-green);
@@ -338,25 +355,24 @@
       </svg>
       Հայերեն
     </div>
-    <div class="stats" id="stats-counter">Սովորված: 0</div>
+    <div class="stats" id="stats-counter">Սովորված. 0 / 0</div>
   </header>
 
   <div class="app-container">
     <div class="card" id="card-box">
+      <!-- Плашка НОР для новых слов -->
+      <div class="new-badge" id="new-badge">ՆՈՐ</div>
+
       <div class="img-box" id="img-box">
         <img id="card-img" src="" alt="Պատկեր">
       </div>
       
-      <div class="mode-badge" id="mode-badge">Բեռնվում է...</div>
       <div class="prompt-text" id="prompt-text">Բեռնվում է տվյալները...</div>
 
-      <!-- Зона заданий / вариантов ответа -->
       <div id="exercise-area" style="width: 100%;"></div>
       
-      <!-- Зеленая кнопка "Գիտեմ" внутри карточки -->
       <button class="btn-know-inside" id="btn-know-inside" onclick="markAsKnown()">Գիտեմ</button>
 
-      <!-- Клавиатура -->
       <div class="armenian-keyboard" id="arm-keyboard">
         <div class="kb-row">
           <button class="kb-key" onclick="typeChar('ձ', 'Ձ')">ձ</button>
@@ -421,7 +437,7 @@
       <div class="feedback-msg" id="feedback-msg"></div>
     </div>
 
-    <!-- Футер управления (кнопки по центру) -->
+    <!-- Футер с выровненными кнопками -->
     <div class="footer-controls">
       <button class="btn-dont-know" id="btn-dont-know" onclick="revealAnswer()">Չգիտեմ</button>
       <button class="next-btn" id="next-btn" onclick="nextQuestion()">Հաջորդը ➔</button>
@@ -501,11 +517,20 @@
         document.getElementById('prompt-text').innerText = '🎉 Բոլոր բառերը սովորված են!';
         document.getElementById('exercise-area').innerHTML = '';
         document.getElementById('btn-dont-know').style.display = 'none';
+        document.getElementById('new-badge').style.display = 'none';
         return;
       }
 
       currentWord = activeWords[Math.floor(Math.random() * activeWords.length)];
       
+      // Индикатор НОВОР слова (если уровень 0)
+      const newBadge = document.getElementById('new-badge');
+      if (currentWord.level === 0) {
+        newBadge.style.display = 'block';
+      } else {
+        newBadge.style.display = 'none';
+      }
+
       if (currentWord.level === 0) {
         currentMode = 0;
       } else if (currentWord.level === 1) {
@@ -514,21 +539,17 @@
         currentMode = 2;
       }
 
-      const badge = document.getElementById('mode-badge');
       const prompt = document.getElementById('prompt-text');
       const area = document.getElementById('exercise-area');
       area.innerHTML = '';
 
       if (currentMode === 0) {
-        badge.innerText = 'Թարգմանություն (նոր բառ)';
         prompt.innerText = currentWord.armenian;
         renderOptions('russian', getDistractors('russian', currentWord.russian));
       } else if (currentMode === 1) {
-        badge.innerText = 'Ընտրել բառը';
         prompt.innerText = currentWord.russian;
         renderOptions('armenian', getDistractors('armenian', currentWord.armenian));
       } else {
-        badge.innerText = 'Գրել հայերեն';
         prompt.innerText = currentWord.russian;
         area.innerHTML = `
           <div class="input-box">
@@ -623,6 +644,7 @@
       document.getElementById('arm-keyboard').style.display = 'none';
       document.getElementById('btn-dont-know').style.display = 'none';
       document.getElementById('next-btn').style.display = 'block';
+      document.getElementById('new-badge').style.display = 'none';
 
       const upperArm = formatArmenianCaps(currentWord.armenian);
       const lowerArm = currentWord.armenian.toLowerCase();
@@ -674,7 +696,7 @@
 
     function updateStats() {
       const learned = words.filter(w => w.level >= 7).length;
-      document.getElementById('stats-counter').innerText = `Սովորված: ${learned} / ${words.length}`;
+      document.getElementById('stats-counter').innerText = `Սովորված. ${learned} / ${words.length}`;
     }
 
     init();
