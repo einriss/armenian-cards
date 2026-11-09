@@ -43,13 +43,14 @@
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      min-height: 100vh;
-      min-height: 100dvh;
+      height: 100vh;
+      height: 100dvh;
       margin: 0;
       padding: 0;
+      overflow: hidden;
     }
 
-    /* Идеальная шапка: опускаем контент ниже строки состояния, убирая фальш-панели */
+    /* Шапка на всю ширину с аккуратным отступом */
     header {
       width: 100%;
       background: var(--primary);
@@ -57,8 +58,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      /* Безопасный отступ сверху точно под челку/динамический остров iOS */
-      padding-top: max(44px, calc(env(safe-area-inset-top) + 12px));
+      padding-top: calc(env(safe-area-inset-top) + 12px);
       padding-bottom: 14px;
       padding-left: 20px;
       padding-right: 20px;
@@ -66,7 +66,6 @@
       position: relative;
       flex-shrink: 0;
       z-index: 100;
-      /* Настоящая ковровая бахрома с висюльками через SVG */
       border-bottom: 10px solid transparent;
       border-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 10' width='20' height='10'%3E%3Cpath d='M0 0 L2 10 L4 0 L6 10 L8 0 L10 10 L12 0 L14 10 L16 0 L18 10 L20 0 Z' fill='%23e2e8f0'/%3E%3C/svg%3E") 0 0 10 0 repeat;
     }
@@ -97,15 +96,17 @@
       border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
+    /* Контейнер теперь занимает всю ширину телефона без сжатия */
     .app-container {
       width: 100%;
-      max-width: 400px;
+      max-width: 480px;
       flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 15px;
+      padding: 10px 16px;
+      overflow-y: auto;
     }
 
     .card {
@@ -288,11 +289,10 @@
       transform: scale(0.98);
     }
 
-    /* Футер с безопасным отступом снизу */
     .footer-controls {
       width: 100%;
-      max-width: 400px;
-      padding: 0 15px calc(15px + env(safe-area-inset-bottom)) 15px;
+      max-width: 480px;
+      padding: 0 16px calc(15px + env(safe-area-inset-bottom)) 16px;
       display: flex;
       gap: 10px;
       align-items: center;
