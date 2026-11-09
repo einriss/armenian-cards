@@ -5,19 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Հայերենի Քարտեր</title>
   
-  <!-- Запрет кеширования для PWA -->
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
 
-  <!-- Фикс размытия статус-бара в iOS PWA -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#6d28d9">
 
-  <!-- Вшитая PNG-иконка граната для iOS Apple Touch Icon и закладок Safari (PNG Base64) -->
-  <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSU_POMEGRANATE_ICON_EMBEDDED">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%236d28d9'/%3E%3Cpath d='M28 8L32 2L36 8L42 4L40 12C50 16 56 26 56 38C56 51.2548 45.2548 62 32 62C18.7452 62 8 51.2548 8 38C8 26 14 16 24 12L22 4L28 8Z' fill='%23BE123C'/%3E%3Cpath d='M32 18C41.9411 18 50 26.0589 50 36C50 45.9411 41.9411 54 32 54C22.0589 54 14 45.9411 14 36C14 26.0589 22.0589 18 32 18Z' fill='%23E11D48'/%3E%3Ccircle cx='26' cy='30' r='3' fill='%23881337'/%3E%3Ccircle cx='34' cy='28' r='3.5' fill='%23881337'/%3E%3Ccircle cx='38' cy='36' r='3' fill='%23881337'/%3E%3Ccircle cx='28' cy='40' r='3.5' fill='%23881337'/%3E%3Ccircle cx='34' cy='44' r='3' fill='%23881337'/%3E%3Cpath d='M40 10C46 6 52 8 54 10C52 14 46 14 40 10Z' fill='%2315803D'/%3E%3C/svg%3E">
+  <!-- Ссылки на реальные файлы иконок в корне вашего сайта -->
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <style>
@@ -38,13 +36,9 @@
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
     
-    html {
-      background: var(--primary);
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    html, body {
       background: var(--bg-color);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       color: var(--text-main);
       display: flex;
       flex-direction: column;
@@ -57,7 +51,18 @@
       overflow: hidden;
     }
 
-    /* Шапка без размытия, со смещенным отступом ниже часов и челки iOS */
+    /* Фальш-панель сверху, принимающая на себя системное размытие iOS */
+    .ios-statusbar-fix {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: env(safe-area-inset-top);
+      background: var(--primary);
+      z-index: 1000;
+    }
+
+    /* Шапка приложения под фальш-панелью */
     header {
       width: 100%;
       background: var(--primary);
@@ -65,10 +70,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-top: calc(20px + env(safe-area-inset-top));
-      padding-bottom: 14px;
-      padding-left: 20px;
-      padding-right: 20px;
+      padding: 14px 20px;
+      margin-top: env(safe-area-inset-top);
       box-shadow: 0 4px 12px rgba(109, 40, 217, 0.2);
       position: relative;
       flex-shrink: 0;
@@ -130,7 +133,6 @@
       transition: all 0.3s ease;
     }
 
-    /* Игольчатый скин-пузырь (scream bubble) для ՆՈՐ */
     .new-badge {
       position: absolute;
       top: -14px;
@@ -297,7 +299,6 @@
       transform: scale(0.98);
     }
 
-    /* Футер с безопасным отступом снизу (safe-area-inset-bottom) */
     .footer-controls {
       width: 100%;
       max-width: 400px;
@@ -374,6 +375,9 @@
   </style>
 </head>
 <body>
+
+  <!-- Фальш-панель для перехвата размытия статус-бара iOS -->
+  <div class="ios-statusbar-fix"></div>
 
   <header>
     <div class="logo">
