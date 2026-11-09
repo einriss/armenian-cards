@@ -150,7 +150,6 @@
       color: var(--text-main);
     }
 
-    /* Виртуальная клавиатура с учетом Shift и новых символов */
     .armenian-keyboard {
       display: none;
       width: 100%;
@@ -217,16 +216,6 @@
     .opt-btn:active {
       transform: scale(0.98);
     }
-    .opt-btn.correct {
-      background: #d1fae5 !important;
-      border-color: var(--accent-green) !important;
-      color: #065f46 !important;
-    }
-    .opt-btn.wrong {
-      background: #fee2e2 !important;
-      border-color: var(--accent-rose-dark) !important;
-      color: #991b1b !important;
-    }
 
     .action-btn {
       width: 100%;
@@ -242,6 +231,26 @@
       box-shadow: 0 4px 12px rgba(109, 40, 217, 0.25);
     }
 
+    /* Изумрудно-зеленая кнопка "Գիտեմ" внутри карточки по центру */
+    .btn-know-inside {
+      width: 100%;
+      padding: 14px;
+      margin-top: 10px;
+      background: var(--accent-green);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: 16px;
+      cursor: pointer;
+      display: none;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+    }
+    .btn-know-inside:active {
+      transform: scale(0.98);
+    }
+
     .footer-controls {
       width: 100%;
       max-width: 400px;
@@ -251,9 +260,9 @@
       align-items: center;
     }
     
-    /* Кнопка "Չգիտեմ" (Не знаю) — светло-желтая слева */
+    /* Кнопка "Չգիտեմ" (Не знаю) — светло-желтая */
     .btn-dont-know {
-      flex: 1;
+      width: 100%;
       padding: 14px;
       background: var(--accent-yellow);
       color: #78350f;
@@ -265,25 +274,9 @@
       text-align: center;
     }
 
-    /* Кнопка "Գիտեմ" (Знаю) после правильного ответа — изумрудная слева */
-    .btn-know {
-      flex: 1;
-      padding: 14px;
-      background: var(--accent-green);
-      color: white;
-      border: none;
-      border-radius: 14px;
-      font-weight: 800;
-      font-size: 15px;
-      cursor: pointer;
-      display: none;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
-    }
-
-    /* Кнопка "Հաջորդ" (Дальше) — розовая справа */
+    /* Кнопка "Հաջորդը" (Дальше) — розовая по центру внизу */
     .next-btn {
-      flex: 1;
+      width: 100%;
       padding: 14px;
       font-size: 15px;
       font-weight: 800;
@@ -311,7 +304,7 @@
       color: var(--accent-rose-dark);
     }
 
-    .error-card-content {
+    .card-word-content {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -357,9 +350,13 @@
       <div class="mode-badge" id="mode-badge">Բեռնվում է...</div>
       <div class="prompt-text" id="prompt-text">Բեռնվում է տվյալները...</div>
 
+      <!-- Зона заданий / вариантов ответа -->
       <div id="exercise-area" style="width: 100%;"></div>
       
-      <!-- Клавиатура с учетом Shift, ՜ и - в верхнем ряду -->
+      <!-- Зеленая кнопка "Գիտեմ" внутри карточки -->
+      <button class="btn-know-inside" id="btn-know-inside" onclick="markAsKnown()">Գիտեմ</button>
+
+      <!-- Клавиатура -->
       <div class="armenian-keyboard" id="arm-keyboard">
         <div class="kb-row">
           <button class="kb-key" onclick="typeChar('ձ', 'Ձ')">ձ</button>
@@ -424,10 +421,9 @@
       <div class="feedback-msg" id="feedback-msg"></div>
     </div>
 
-    <!-- Контролы экрана -->
+    <!-- Футер управления (кнопки по центру) -->
     <div class="footer-controls">
       <button class="btn-dont-know" id="btn-dont-know" onclick="revealAnswer()">Չգիտեմ</button>
-      <button class="btn-know" id="btn-know" onclick="markAsKnown()">Գիտեմ</button>
       <button class="next-btn" id="next-btn" onclick="nextQuestion()">Հաջորդը ➔</button>
     </div>
   </div>
@@ -438,7 +434,7 @@
 
     let words = [];
     let currentWord = null;
-    let currentMode = 0; // 0: арм->рус (выбор), 1: рус->арм (выбор), 2: ввод с клавиатуры
+    let currentMode = 0;
     let waitingForNext = false;
     let isShift = false;
 
@@ -495,7 +491,7 @@
       
       document.getElementById('img-box').style.display = 'none';
       document.getElementById('next-btn').style.display = 'none';
-      document.getElementById('btn-know').style.display = 'none';
+      document.getElementById('btn-know-inside').style.display = 'none';
       document.getElementById('btn-dont-know').style.display = 'block';
       document.getElementById('arm-keyboard').style.display = 'none';
       document.getElementById('card-box').style.borderColor = 'var(--border-color)';
@@ -510,10 +506,6 @@
 
       currentWord = activeWords[Math.floor(Math.random() * activeWords.length)];
       
-      // Умная поэтапная механика:
-      // level 0 -> режим 0 (арм -> рус выбор)
-      // level 1 -> режим 1 (рус -> арм выбор)
-      // level >= 2 -> режим 2 (ввод с клавиатуры)
       if (currentWord.level === 0) {
         currentMode = 0;
       } else if (currentWord.level === 1) {
@@ -591,7 +583,6 @@
       area.innerHTML = html;
     }
 
-    // Очистка строки от регистра и спецсимволов: … ՜ - ,
     function normalizeText(text) {
       return text.toLowerCase().replace(/[…՜\-,]/g, '').trim();
     }
@@ -609,22 +600,14 @@
     function checkOption(btn, selected, correct) {
       if (waitingForNext) return;
       const isCorrect = normalizeText(selected) === normalizeText(correct);
-      const buttons = document.querySelectorAll('.opt-btn');
-      buttons.forEach(b => {
-        if (normalizeText(b.innerText) === normalizeText(correct)) b.classList.add('correct');
-        if (b === btn && !isCorrect) b.classList.add('wrong');
-        b.onclick = null;
-      });
       handleAnswer(isCorrect);
     }
 
-    // Обработка кнопки "Չգիտեմ" (Не знаю)
     function revealAnswer() {
       if (waitingForNext) return;
       handleAnswer(false);
     }
 
-    // Форматирование ԵՎ при капсе
     function formatArmenianCaps(str) {
       return str.replace(/և/g, 'ԵՎ').toUpperCase();
     }
@@ -635,39 +618,42 @@
       const cardBox = document.getElementById('card-box');
       
       showImage(currentWord.russian);
+
+      document.getElementById('exercise-area').innerHTML = '';
       document.getElementById('arm-keyboard').style.display = 'none';
       document.getElementById('btn-dont-know').style.display = 'none';
       document.getElementById('next-btn').style.display = 'block';
 
+      const upperArm = formatArmenianCaps(currentWord.armenian);
+      const lowerArm = currentWord.armenian.toLowerCase();
+      const cardTitleHtml = `
+        <div class="card-word-content">
+          <div class="arm-word">${upperArm} ${lowerArm}</div>
+          <div class="ru-word">${currentWord.russian}</div>
+        </div>
+      `;
+
       if (isCorrect) {
         cardBox.style.borderColor = 'var(--accent-green)';
+        document.getElementById('prompt-text').innerHTML = cardTitleHtml;
+
         msg.className = 'feedback-msg success';
         msg.innerHTML = '✨ Ճիշտ է!';
-        document.getElementById('prompt-text').innerText = `${currentWord.armenian} — ${currentWord.russian}`;
         
         currentWord.level = Math.min(7, currentWord.level + 1);
         saveProgressToSheet(currentWord.armenian, currentWord.level);
         
-        // Показываем зеленую кнопку "Գիտեմ" слева
-        document.getElementById('btn-know').style.display = 'block';
+        document.getElementById('btn-know-inside').style.display = 'block';
+
       } else {
         cardBox.style.borderColor = 'var(--accent-rose-dark)';
-        
-        const upperArm = formatArmenianCaps(currentWord.armenian);
-        const lowerArm = currentWord.armenian.toLowerCase();
-        document.getElementById('prompt-text').innerHTML = `
-          <div class="error-card-content">
-            <div class="arm-word">${upperArm} ${lowerArm}</div>
-            <div class="ru-word">${currentWord.russian}</div>
-          </div>
-        `;
+        document.getElementById('prompt-text').innerHTML = cardTitleHtml;
         
         msg.className = 'feedback-msg error';
         msg.innerHTML = '❌ Սխալ է';
         
         currentWord.level = Math.max(0, currentWord.level - 1);
         saveProgressToSheet(currentWord.armenian, currentWord.level);
-        document.getElementById('exercise-area').innerHTML = '';
       }
     }
 
