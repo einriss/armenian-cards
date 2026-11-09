@@ -5,12 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Հայերենի Քարտեր</title>
   
+  <!-- Запрет жесткого кеширования HTML-файла для мобильного Safari / PWA -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
   <!-- Теги для iOS PWA и статус-бара -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#6d28d9">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
+  <link rel="manifest" href="manifest.json">
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
   <style>
@@ -466,7 +472,7 @@
   </div>
 
   <script>
-    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSzY_RxdjH_dkidV-IP2EjpHwa-jm5uCSoampbOqYF4QOz2IKvfUSTVOVfUIyp89qTIuPOmdHZ_iBwS/pub?output=csv';
+    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSzY_RxdjH_dkidV-IP2EjpHwa-jm5uCSoampbOqYF4QOz2IKvfUSTVOVfUIyp89qTIuPOmdHZ_iBwS/pub?output=csv&nocache=' + new Date().getTime();
     const SAVE_API_URL = 'https://script.google.com/macros/s/AKfycbyKYPb6zu0bO6NAtsm2vJoNn_YKk63MS8xeUjdCKIfflXvtPrCB0u62UVVTV82EKE6F/exec';
 
     let words = [];
@@ -597,6 +603,12 @@
       const input = document.getElementById('user-input');
       if (input) {
         input.value += (isShift ? upper : lower);
+      }
+      // Одиночный ввод заглавной буквы: если Shift был включен, отжимаем его после ввода буквы
+      if (isShift) {
+        isShift = false;
+        const btn = document.getElementById('shift-btn');
+        if (btn) btn.classList.remove('shift-active');
       }
     }
 
