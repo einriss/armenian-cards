@@ -11,17 +11,17 @@
       --card-bg: #ffffff;
       --primary: #6d28d9;
       --primary-light: #f3e8ff;
-      --accent-yellow: #fef3c7;
-      --accent-yellow-border: #fde68a;
+      --accent-yellow: #fff66e;
+      --accent-yellow-border: #fef08a;
       --accent-green: #059669;
-      --accent-rose: #fb7185; /* Мягкий розовый цвет */
+      --accent-pink: #ff86e0;
       --accent-rose-dark: #e11d48;
       --text-main: #0f172a;
       --text-muted: #64748b;
       --border-color: #ddd6fe;
     }
 
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background: var(--bg-color);
@@ -150,7 +150,7 @@
       color: var(--text-main);
     }
 
-    /* Точная раскладка клавиатуры по вашему заказу */
+    /* Виртуальная клавиатура с учетом Shift и новых символов */
     .armenian-keyboard {
       display: none;
       width: 100%;
@@ -188,6 +188,10 @@
     .kb-key.action {
       background: #c4b5fd;
       color: #4c1d95;
+    }
+    .kb-key.shift-active {
+      background: #8b5cf6;
+      color: white;
     }
 
     .options-grid {
@@ -247,8 +251,8 @@
       align-items: center;
     }
     
-    /* Нежно-желтая кнопка Знаю (слева) */
-    .btn-know {
+    /* Кнопка "Չգիտեմ" (Не знаю) — светло-желтая слева */
+    .btn-dont-know {
       flex: 1;
       padding: 14px;
       background: var(--accent-yellow);
@@ -261,23 +265,38 @@
       text-align: center;
     }
 
-    /* Розовая кнопка Дальше (справа, на месте Знаю) */
+    /* Кнопка "Գիտեմ" (Знаю) после правильного ответа — изумрудная слева */
+    .btn-know {
+      flex: 1;
+      padding: 14px;
+      background: var(--accent-green);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: 15px;
+      cursor: pointer;
+      display: none;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
+    }
+
+    /* Кнопка "Հաջորդ" (Дальше) — розовая справа */
     .next-btn {
       flex: 1;
       padding: 14px;
       font-size: 15px;
       font-weight: 800;
-      background: var(--accent-rose);
-      color: white;
+      background: var(--accent-pink);
+      color: #701a75;
       border: none;
       border-radius: 14px;
       cursor: pointer;
       display: none;
       text-align: center;
-      box-shadow: 0 4px 12px rgba(251, 113, 133, 0.3);
+      box-shadow: 0 4px 12px rgba(255, 134, 224, 0.4);
     }
 
-    /* Единый стиль для блока обратной связи (и для успеха, и для ошибки) */
     .feedback-msg {
       margin-top: 12px;
       font-weight: 800;
@@ -292,7 +311,6 @@
       color: var(--accent-rose-dark);
     }
 
-    /* Типографский формат слова при ошибке */
     .error-card-content {
       display: flex;
       flex-direction: column;
@@ -341,61 +359,64 @@
 
       <div id="exercise-area" style="width: 100%;"></div>
       
-      <!-- Исправленная клавиатура по вашему точному списку -->
+      <!-- Клавиатура с учетом Shift, ՜ и - в верхнем ряду -->
       <div class="armenian-keyboard" id="arm-keyboard">
         <div class="kb-row">
-          <button class="kb-key" onclick="typeChar('ձ')">ձ</button>
-          <button class="kb-key" onclick="typeChar('յ')">յ</button>
-          <button class="kb-key" onclick="typeChar('և')">և</button>
-          <button class="kb-key" onclick="typeChar('օ')">օ</button>
-          <button class="kb-key" onclick="typeChar('ռ')">ռ</button>
-          <button class="kb-key" onclick="typeChar('ժ')">ժ</button>
-          <button class="kb-key" onclick="typeChar('։')">։</button>
-          <button class="kb-key" onclick="typeChar('՛')">՛</button>
-          <button class="kb-key" onclick="typeChar(',')">,</button>
-          <button class="kb-key" onclick="typeChar('՞')">՞</button>
+          <button class="kb-key" onclick="typeChar('ձ', 'Ձ')">ձ</button>
+          <button class="kb-key" onclick="typeChar('յ', 'Յ')">յ</button>
+          <button class="kb-key" onclick="typeChar('և', 'ԵՎ')">և</button>
+          <button class="kb-key" onclick="typeChar('օ', 'Օ')">օ</button>
+          <button class="kb-key" onclick="typeChar('ռ', 'Ռ')">ռ</button>
+          <button class="kb-key" onclick="typeChar('ժ', 'Ժ')">ժ</button>
+          <button class="kb-key" onclick="typeChar('։', '։')">։</button>
+          <button class="kb-key" onclick="typeChar('՜', '՜')">՜</button>
+          <button class="kb-key" onclick="typeChar('-', '-')">-</button>
+          <button class="kb-key" onclick="typeChar(',', ',')">,</button>
+          <button class="kb-key" onclick="typeChar('՛', '՛')">՛</button>
+          <button class="kb-key" onclick="typeChar('՞', '՞')">՞</button>
         </div>
         <div class="kb-row">
-          <button class="kb-key" onclick="typeChar('խ')">խ</button>
-          <button class="kb-key" onclick="typeChar('վ')">վ</button>
-          <button class="kb-key" onclick="typeChar('է')">է</button>
-          <button class="kb-key" onclick="typeChar('ր')">ր</button>
-          <button class="kb-key" onclick="typeChar('դ')">դ</button>
-          <button class="kb-key" onclick="typeChar('ե')">ե</button>
-          <button class="kb-key" onclick="typeChar('ը')">ը</button>
-          <button class="kb-key" onclick="typeChar('ի')">ի</button>
-          <button class="kb-key" onclick="typeChar('ո')">ո</button>
-          <button class="kb-key" onclick="typeChar('բ')">բ</button>
-          <button class="kb-key" onclick="typeChar('չ')">չ</button>
-          <button class="kb-key" onclick="typeChar('ջ')">ջ</button>
+          <button class="kb-key" onclick="typeChar('խ', 'Խ')">խ</button>
+          <button class="kb-key" onclick="typeChar('վ', 'Վ')">վ</button>
+          <button class="kb-key" onclick="typeChar('է', 'Է')">է</button>
+          <button class="kb-key" onclick="typeChar('ր', 'Ր')">ր</button>
+          <button class="kb-key" onclick="typeChar('դ', 'Դ')">դ</button>
+          <button class="kb-key" onclick="typeChar('ե', 'Ե')">ե</button>
+          <button class="kb-key" onclick="typeChar('ը', 'Ը')">ը</button>
+          <button class="kb-key" onclick="typeChar('ի', 'Ի')">ի</button>
+          <button class="kb-key" onclick="typeChar('ո', 'Ո')">ո</button>
+          <button class="kb-key" onclick="typeChar('բ', 'Բ')">բ</button>
+          <button class="kb-key" onclick="typeChar('չ', 'Չ')">չ</button>
+          <button class="kb-key" onclick="typeChar('ջ', 'Ջ')">ջ</button>
         </div>
         <div class="kb-row">
-          <button class="kb-key" onclick="typeChar('ա')">ա</button>
-          <button class="kb-key" onclick="typeChar('ս')">ս</button>
-          <button class="kb-key" onclick="typeChar('տ')">տ</button>
-          <button class="kb-key" onclick="typeChar('ֆ')">ֆ</button>
-          <button class="kb-key" onclick="typeChar('կ')">կ</button>
-          <button class="kb-key" onclick="typeChar('հ')">հ</button>
-          <button class="kb-key" onclick="typeChar('ճ')">ճ</button>
-          <button class="kb-key" onclick="typeChar('ք')">ք</button>
-          <button class="kb-key" onclick="typeChar('լ')">լ</button>
-          <button class="kb-key" onclick="typeChar('թ')">թ</button>
-          <button class="kb-key" onclick="typeChar('փ')">փ</button>
+          <button class="kb-key" onclick="typeChar('ա', 'Ա')">ա</button>
+          <button class="kb-key" onclick="typeChar('ս', 'Ս')">ս</button>
+          <button class="kb-key" onclick="typeChar('տ', 'Տ')">տ</button>
+          <button class="kb-key" onclick="typeChar('ֆ', 'Ֆ')">ֆ</button>
+          <button class="kb-key" onclick="typeChar('կ', 'Կ')">կ</button>
+          <button class="kb-key" onclick="typeChar('հ', 'Հ')">հ</button>
+          <button class="kb-key" onclick="typeChar('ճ', 'Ճ')">ճ</button>
+          <button class="kb-key" onclick="typeChar('ք', 'Ք')">ք</button>
+          <button class="kb-key" onclick="typeChar('լ', 'Լ')">լ</button>
+          <button class="kb-key" onclick="typeChar('թ', 'Թ')">թ</button>
+          <button class="kb-key" onclick="typeChar('փ', 'Փ')">փ</button>
         </div>
         <div class="kb-row">
-          <button class="kb-key" onclick="typeChar('զ')">զ</button>
-          <button class="kb-key" onclick="typeChar('ց')">ց</button>
-          <button class="kb-key" onclick="typeChar('գ')">գ</button>
-          <button class="kb-key" onclick="typeChar('ւ')">ւ</button>
-          <button class="kb-key" onclick="typeChar('պ')">պ</button>
-          <button class="kb-key" onclick="typeChar('ն')">ն</button>
-          <button class="kb-key" onclick="typeChar('մ')">մ</button>
-          <button class="kb-key" onclick="typeChar('շ')">շ</button>
-          <button class="kb-key" onclick="typeChar('ղ')">ղ</button>
-          <button class="kb-key" onclick="typeChar('ծ')">ծ</button>
+          <button class="kb-key" onclick="typeChar('զ', 'Զ')">զ</button>
+          <button class="kb-key" onclick="typeChar('ց', 'Ց')">ց</button>
+          <button class="kb-key" onclick="typeChar('գ', 'Գ')">գ</button>
+          <button class="kb-key" onclick="typeChar('ւ', 'Ւ')">ւ</button>
+          <button class="kb-key" onclick="typeChar('պ', 'Պ')">պ</button>
+          <button class="kb-key" onclick="typeChar('ն', 'Ն')">ն</button>
+          <button class="kb-key" onclick="typeChar('մ', 'Մ')">մ</button>
+          <button class="kb-key" onclick="typeChar('շ', 'Շ')">շ</button>
+          <button class="kb-key" onclick="typeChar('ղ', 'Ղ')">ղ</button>
+          <button class="kb-key" onclick="typeChar('ծ', 'Ծ')">ծ</button>
         </div>
         <div class="kb-row">
-          <button class="kb-key" style="flex: 5;" onclick="typeChar(' ')">բացատ</button>
+          <button class="kb-key action" id="shift-btn" style="flex: 2;" onclick="toggleShift()">⇧</button>
+          <button class="kb-key" style="flex: 5;" onclick="typeChar(' ', ' ')">բացատ</button>
           <button class="kb-key action" style="flex: 2;" onclick="deleteChar()">⌫</button>
         </div>
       </div>
@@ -403,8 +424,9 @@
       <div class="feedback-msg" id="feedback-msg"></div>
     </div>
 
-    <!-- Панель управления вне карточки -->
+    <!-- Контролы экрана -->
     <div class="footer-controls">
+      <button class="btn-dont-know" id="btn-dont-know" onclick="revealAnswer()">Չգիտեմ</button>
       <button class="btn-know" id="btn-know" onclick="markAsKnown()">Գիտեմ</button>
       <button class="next-btn" id="next-btn" onclick="nextQuestion()">Հաջորդը ➔</button>
     </div>
@@ -416,8 +438,9 @@
 
     let words = [];
     let currentWord = null;
-    let currentMode = 0;
+    let currentMode = 0; // 0: арм->рус (выбор), 1: рус->арм (выбор), 2: ввод с клавиатуры
     let waitingForNext = false;
+    let isShift = false;
 
     async function init() {
       try {
@@ -472,7 +495,8 @@
       
       document.getElementById('img-box').style.display = 'none';
       document.getElementById('next-btn').style.display = 'none';
-      document.getElementById('btn-know').style.display = 'block';
+      document.getElementById('btn-know').style.display = 'none';
+      document.getElementById('btn-dont-know').style.display = 'block';
       document.getElementById('arm-keyboard').style.display = 'none';
       document.getElementById('card-box').style.borderColor = 'var(--border-color)';
 
@@ -480,12 +504,23 @@
       if (activeWords.length === 0) {
         document.getElementById('prompt-text').innerText = '🎉 Բոլոր բառերը սովորված են!';
         document.getElementById('exercise-area').innerHTML = '';
-        document.getElementById('btn-know').style.display = 'none';
+        document.getElementById('btn-dont-know').style.display = 'none';
         return;
       }
 
       currentWord = activeWords[Math.floor(Math.random() * activeWords.length)];
-      currentMode = Math.floor(Math.random() * 3);
+      
+      // Умная поэтапная механика:
+      // level 0 -> режим 0 (арм -> рус выбор)
+      // level 1 -> режим 1 (рус -> арм выбор)
+      // level >= 2 -> режим 2 (ввод с клавиатуры)
+      if (currentWord.level === 0) {
+        currentMode = 0;
+      } else if (currentWord.level === 1) {
+        currentMode = 1;
+      } else {
+        currentMode = 2;
+      }
 
       const badge = document.getElementById('mode-badge');
       const prompt = document.getElementById('prompt-text');
@@ -493,6 +528,14 @@
       area.innerHTML = '';
 
       if (currentMode === 0) {
+        badge.innerText = 'Թարգմանություն (նոր բառ)';
+        prompt.innerText = currentWord.armenian;
+        renderOptions('russian', getDistractors('russian', currentWord.russian));
+      } else if (currentMode === 1) {
+        badge.innerText = 'Ընտրել բառը';
+        prompt.innerText = currentWord.russian;
+        renderOptions('armenian', getDistractors('armenian', currentWord.armenian));
+      } else {
         badge.innerText = 'Գրել հայերեն';
         prompt.innerText = currentWord.russian;
         area.innerHTML = `
@@ -502,24 +545,26 @@
           </div>
         `;
         document.getElementById('arm-keyboard').style.display = 'flex';
-
-      } else if (currentMode === 1) {
-        badge.innerText = 'Թարգմանություն';
-        prompt.innerText = currentWord.armenian;
-        renderOptions('russian', getDistractors('russian', currentWord.russian));
-
-      } else if (currentMode === 2) {
-        badge.innerText = 'Ընտրել բառը';
-        prompt.innerText = currentWord.russian;
-        renderOptions('armenian', getDistractors('armenian', currentWord.armenian));
       }
 
       updateStats();
     }
 
-    function typeChar(char) {
+    function toggleShift() {
+      isShift = !isShift;
+      const btn = document.getElementById('shift-btn');
+      if (isShift) {
+        btn.classList.add('shift-active');
+      } else {
+        btn.classList.remove('shift-active');
+      }
+    }
+
+    function typeChar(lower, upper) {
       const input = document.getElementById('user-input');
-      if (input) input.value += char;
+      if (input) {
+        input.value += (isShift ? upper : lower);
+      }
     }
 
     function deleteChar() {
@@ -546,26 +591,42 @@
       area.innerHTML = html;
     }
 
+    // Очистка строки от регистра и спецсимволов: … ՜ - ,
+    function normalizeText(text) {
+      return text.toLowerCase().replace(/[…՜\-,]/g, '').trim();
+    }
+
     function checkInput() {
       if (waitingForNext) return;
       const input = document.getElementById('user-input');
       if (!input) return;
-      const val = input.value.trim().toLowerCase();
-      const target = currentWord.armenian.trim().toLowerCase();
+      const val = normalizeText(input.value);
+      const target = normalizeText(currentWord.armenian);
       const isCorrect = val === target;
       handleAnswer(isCorrect);
     }
 
     function checkOption(btn, selected, correct) {
       if (waitingForNext) return;
-      const isCorrect = selected.trim().toLowerCase() === correct.trim().toLowerCase();
+      const isCorrect = normalizeText(selected) === normalizeText(correct);
       const buttons = document.querySelectorAll('.opt-btn');
       buttons.forEach(b => {
-        if (b.innerText.trim().toLowerCase() === correct.trim().toLowerCase()) b.classList.add('correct');
+        if (normalizeText(b.innerText) === normalizeText(correct)) b.classList.add('correct');
         if (b === btn && !isCorrect) b.classList.add('wrong');
         b.onclick = null;
       });
       handleAnswer(isCorrect);
+    }
+
+    // Обработка кнопки "Չգիտեմ" (Не знаю)
+    function revealAnswer() {
+      if (waitingForNext) return;
+      handleAnswer(false);
+    }
+
+    // Форматирование ԵՎ при капсе
+    function formatArmenianCaps(str) {
+      return str.replace(/և/g, 'ԵՎ').toUpperCase();
     }
 
     function handleAnswer(isCorrect) {
@@ -575,7 +636,7 @@
       
       showImage(currentWord.russian);
       document.getElementById('arm-keyboard').style.display = 'none';
-      document.getElementById('btn-know').style.display = 'none';
+      document.getElementById('btn-dont-know').style.display = 'none';
       document.getElementById('next-btn').style.display = 'block';
 
       if (isCorrect) {
@@ -583,14 +644,16 @@
         msg.className = 'feedback-msg success';
         msg.innerHTML = '✨ Ճիշտ է!';
         document.getElementById('prompt-text').innerText = `${currentWord.armenian} — ${currentWord.russian}`;
+        
         currentWord.level = Math.min(7, currentWord.level + 1);
         saveProgressToSheet(currentWord.armenian, currentWord.level);
-        setTimeout(nextQuestion, 1400);
+        
+        // Показываем зеленую кнопку "Գիտեմ" слева
+        document.getElementById('btn-know').style.display = 'block';
       } else {
         cardBox.style.borderColor = 'var(--accent-rose-dark)';
         
-        // Сверху выводим чисто типографский формат слова (КАПС + маленькие + перевод)
-        const upperArm = currentWord.armenian.toUpperCase();
+        const upperArm = formatArmenianCaps(currentWord.armenian);
         const lowerArm = currentWord.armenian.toLowerCase();
         document.getElementById('prompt-text').innerHTML = `
           <div class="error-card-content">
@@ -599,7 +662,6 @@
           </div>
         `;
         
-        // Внизу выводим крестик и статус ошибки в том же стиле, что и успех
         msg.className = 'feedback-msg error';
         msg.innerHTML = '❌ Սխալ է';
         
