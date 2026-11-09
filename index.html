@@ -13,7 +13,6 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#6d28d9">
 
-  <!-- Ссылки на реальные файлы иконок в корне вашего сайта -->
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
 
@@ -44,25 +43,13 @@
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      height: 100vh;
-      height: 100dvh;
+      min-height: 100vh;
+      min-height: 100dvh;
       margin: 0;
       padding: 0;
-      overflow: hidden;
     }
 
-    /* Фальш-панель сверху, принимающая на себя системное размытие iOS */
-    .ios-statusbar-fix {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: env(safe-area-inset-top);
-      background: var(--primary);
-      z-index: 1000;
-    }
-
-    /* Шапка приложения под фальш-панелью */
+    /* Идеальная шапка: опускаем контент ниже строки состояния, убирая фальш-панели */
     header {
       width: 100%;
       background: var(--primary);
@@ -70,8 +57,11 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 14px 20px;
-      margin-top: env(safe-area-inset-top);
+      /* Безопасный отступ сверху точно под челку/динамический остров iOS */
+      padding-top: max(44px, calc(env(safe-area-inset-top) + 12px));
+      padding-bottom: 14px;
+      padding-left: 20px;
+      padding-right: 20px;
       box-shadow: 0 4px 12px rgba(109, 40, 217, 0.2);
       position: relative;
       flex-shrink: 0;
@@ -115,8 +105,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 10px 15px;
-      overflow-y: auto;
+      padding: 15px;
     }
 
     .card {
@@ -299,6 +288,7 @@
       transform: scale(0.98);
     }
 
+    /* Футер с безопасным отступом снизу */
     .footer-controls {
       width: 100%;
       max-width: 400px;
@@ -375,9 +365,6 @@
   </style>
 </head>
 <body>
-
-  <!-- Фальш-панель для перехвата размытия статус-бара iOS -->
-  <div class="ios-statusbar-fix"></div>
 
   <header>
     <div class="logo">
