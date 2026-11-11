@@ -593,6 +593,10 @@
       } else {
         btn.classList.remove('shift-active');
       }
+      document.querySelectorAll('#arm-keyboard .kb-key').forEach(key => {
+        const match = (key.getAttribute('onclick') || '').match(/typeChar\('([^']+)',\s*'([^']+)'\)/);
+        if (match && match[1] !== ' ') key.textContent = isShift ? match[2] : match[1];
+      });
     }
 
     function typeChar(lower, upper) {
@@ -604,6 +608,7 @@
         isShift = false;
         const btn = document.getElementById('shift-btn');
         if (btn) btn.classList.remove('shift-active');
+        document.querySelectorAll('#arm-keyboard .kb-key').forEach(key => { const m = (key.getAttribute('onclick') || '').match(/typeChar\('([^']+)'/); if (m && m[1] !== ' ') key.textContent = m[1]; });
       }
     }
 
